@@ -1,5 +1,6 @@
 import NextLogo from './NextLogo'
 import SupabaseLogo from './SupabaseLogo'
+import UserIcon from './UserIcon'
 
 export default function Header() {
   return (
@@ -15,6 +16,7 @@ export default function Header() {
         <span className="border-l rotate-45 h-6" />
         <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
           <NextLogo />
+          <UserIcon />
         </a>
       </div>
       <h1 className="sr-only">Supabase and Next.js Starter Template</h1>

@@ -21,6 +21,7 @@
 *.pem
 /client_assets
 gp.txt
+/.vscode
 
 # debug
 npm-debug.log*
