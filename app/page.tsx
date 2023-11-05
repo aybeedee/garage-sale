@@ -1,37 +1,22 @@
-import DeployButton from '../components/DeployButton'
-import AuthButton from '../components/AuthButton'
-import { createClient } from '@/utils/supabase/server'
-import ConnectSupabaseSteps from '@/components/ConnectSupabaseSteps'
-import SignUpUserSteps from '@/components/SignUpUserSteps'
-import Header from '@/components/Header'
-import { cookies } from 'next/headers'
-import GarageSaleLogo from '@/components/GarageSaleLogo'
-import SearchButton from '@/components/SearchButton'
-import ProfileButton from '@/components/ProfileButton'
-import CartButton from '@/components/CartButton'
-import MenuButton from '@/components/MenuButton'
+// import DeployButton from '../components/DeployButton'
+// import AuthButton from '../components/AuthButton'
+// import ConnectSupabaseSteps from '@/components/ConnectSupabaseSteps'
+// import SignUpUserSteps from '@/components/SignUpUserSteps'
+// import Header from '@/components/Header'
+import { cookies } from 'next/headers';
+import GarageSaleLogo from '@/components/GarageSaleLogo';
+import SearchButton from '@/components/SearchButton';
+import ProfileButton from '@/components/ProfileButton';
+import CartButton from '@/components/CartButton';
+import MenuButton from '@/components/MenuButton';
 
 export default async function Index() {
-  const cookieStore = cookies()
-
-  const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
-    try {
-      createClient(cookieStore)
-      return true
-    } catch (e) {
-      return false
-    }
-  }
-
-  const isSupabaseConnected = canInitSupabaseClient()
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="sticky top-0 z-30 w-full flex justify-center border-b bg-white border-b-foreground/10 h-16">
-        <div className="w-full max-w-screen-2xl flex justify-between items-center p-3 text-sm">
-          <div className="flex gap-2">
+      <nav className="sticky top-0 z-30 w-full flex justify-center border-b bg-white border-b-foreground/10 h-20">
+        <div className="w-full max-w-screen-2xl flex justify-between items-center p-7">
+          <div className="flex">
             <MenuButton />
             <SearchButton />
           </div>
@@ -43,10 +28,10 @@ export default async function Index() {
         </div>
       </nav>
 
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+      {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           <DeployButton />
-          {isSupabaseConnected && <AuthButton />}
+          <AuthButton />
         </div>
       </nav>
 
@@ -70,7 +55,7 @@ export default async function Index() {
             Supabase
           </a>
         </p>
-      </footer>
+      </footer> */}
     </div>
   )
 }
