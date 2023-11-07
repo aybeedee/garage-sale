@@ -5,10 +5,10 @@
 // import Header from '@/components/Header'
 import { cookies } from 'next/headers';
 import GarageSaleLogo from '@/components/GarageSaleLogo';
-import SearchButton from '@/components/SearchButton';
-import ProfileButton from '@/components/ProfileButton';
-import CartButton from '@/components/CartButton';
-import MenuButton from '@/components/MenuButton';
+import Search from '@/components/Search';
+import Profile from '@/components/Profile';
+import Cart from '@/components/Cart';
+import Menu from '@/components/Menu';
 
 export default async function Index() {
 
@@ -17,15 +17,15 @@ export default async function Index() {
       <nav className="sticky top-0 z-30 w-full flex justify-center border-b bg-white border-b-foreground/10 h-20">
         <div className="w-full max-w-screen-2xl flex justify-between items-center p-7 max-sm:p-3">
           <div className="flex">
-            <MenuButton />
-            <SearchButton />
+            <Menu />
+            <Search />
           </div>
           <div>
             <GarageSaleLogo />
           </div>
           <div className="flex gap-2">
-            <ProfileButton />
-            <CartButton />
+            <Profile />
+            <Cart />
           </div>
         </div>
       </nav>

@@ -2,8 +2,9 @@
 
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import MenuIcon from './MenuIcon';
 
-export default function MenuButton() {
+export default function Menu() {
 
     const [isOpen, setIsOpen] = useState(false);
     const openMenu = () => setIsOpen(true);
@@ -12,11 +13,7 @@ export default function MenuButton() {
     return (
         <>
             <button onClick={openMenu} className="py-2 px-2 rounded-md no-underline bg-inherit hover:text-white border-black hover:bg-[#363636] border text-black">
-                <svg width="20px" height="20px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" className="hover:scale-110 transition-all ease-in-out">
-                    <path d="M2 12.32H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M2 18.32H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M2 6.32001H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <MenuIcon />
             </button>
             <Transition show={isOpen}>
                 <Dialog onClose={closeMenu} className="relative z-50">
