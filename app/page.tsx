@@ -15,12 +15,14 @@ export default async function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="sticky top-0 z-30 w-full flex justify-center border-b bg-white border-b-foreground/10 h-20">
-        <div className="w-full max-w-screen-2xl flex justify-between items-center p-7">
+        <div className="w-full max-w-screen-2xl flex justify-between items-center p-7 max-sm:p-3">
           <div className="flex">
             <MenuButton />
             <SearchButton />
           </div>
-          <GarageSaleLogo />
+          <div>
+            <GarageSaleLogo />
+          </div>
           <div className="flex gap-2">
             <ProfileButton />
             <CartButton />
