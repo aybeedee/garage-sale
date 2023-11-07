@@ -3,12 +3,36 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import MenuIcon from './MenuIcon';
+import Link from 'next/link';
+
+type Category = {
+    name: string;
+    path: string;
+}
 
 export default function Menu() {
 
     const [isOpen, setIsOpen] = useState(false);
     const openMenu = () => setIsOpen(true);
     const closeMenu = () => setIsOpen(false);
+    const categories: Category[] = [
+        {
+            name: "Kitchenware",
+            path: "kitchenware"
+        },
+        {
+            name: "Home Decor",
+            path: "home-decor"
+        },
+        {
+            name: "Women",
+            path: "women"
+        },
+        {
+            name: "Miscellaneous",
+            path: "miscellaneous"
+        }
+    ];
 
     return (
         <>
@@ -46,22 +70,19 @@ export default function Menu() {
                                 </button>
                             </div>
                             <ul className="flex w-full flex-col">
-                                <li className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
-                                    Kitchenware
-                                </li>
-                                <hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
-                                <li className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
-                                    Home Decor
-                                </li>
-                                <hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
-                                <li className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
-                                    Women
-                                </li>
-                                <hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
-                                <li className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
-                                    Miscellaneous
-                                </li>
-                                <hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
+                                {categories.map((category: Category) => (
+                                    <li key={category.path}>
+                                        <div className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
+                                            <Link
+                                                href={`/products/${category.path}`}
+                                                onClick={closeMenu}
+                                            >
+                                                {category.name}
+                                            </Link>
+                                        </div>
+                                        <hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
+                                    </li>
+                                ))}
                             </ul>
                             <div className="mt-auto text-black">
                                 <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
