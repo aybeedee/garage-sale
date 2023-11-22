@@ -1,6 +1,12 @@
-import { GeistSans } from 'geist/font'
+import { Outfit } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-outfit',
+})
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -18,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={`${outfit.variable}`}>
       <body>
         <Navbar />
         <main className="min-h-screen flex flex-col items-center">
