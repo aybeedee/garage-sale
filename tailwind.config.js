@@ -12,6 +12,8 @@ module.exports = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        primaryColor: 'hsl(var(--primary-color))',
+        secondaryColor: 'hsl(var(--secondary-color))',
         btn: {
           background: 'hsl(var(--btn-background))',
           'background-hover': 'hsl(var(--btn-background-hover))',
