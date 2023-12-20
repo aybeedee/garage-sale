@@ -1,17 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Product, SortType } from '@/utils/types';
 import ProductCard from '@/components/ProductCard';
 
 export default function Category({ params }: { params: { category: string } }) {
 
-    const [sortSelection, setSortSelection] = useState("");
     const [openSortSelect, setpenSortSelect] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleSortSelection = (event: any) => {
-        setSortSelection(event.target.value);
-    };
+    // const handleSortSelection = (event: any) => {
+    //     setSortSelection(event.target.value);
+    // };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setpenSortSelect(false);
+            }
+        };
+
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, []);
 
     const sortingList: SortType[] = [
         {
@@ -84,7 +95,7 @@ export default function Category({ params }: { params: { category: string } }) {
                     {params.category}
                 </h2>
                 <p className="text-gray-500">Showing 37 results</p>
-                <div className="relative w-full sm:w-auto">
+                <div ref={dropdownRef} className="relative w-full sm:w-auto">
                     <button type="button"
                         className="w-full text-white bg-primaryColor hover:bg-primaryColor/80 focus:ring-4 focus:outline-none focus:ring-primaryColor/20 font-medium rounded-lg text-base px-5 py-2.5 text-center items-center flex justify-center sm:w-40"
                         onClick={() => {
