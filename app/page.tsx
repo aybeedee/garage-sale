@@ -34,7 +34,7 @@ export default async function HomePage() {
       <div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1511184059754-e4b5bbbcef75?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Vintage Bolsey C22</h1>
@@ -48,7 +48,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?q=80&w=1928&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Marsupial Rucksack</h1>
@@ -62,7 +62,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1505941625782-5f8710bdd9f3?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Stained Glass Flower Vase</h1>
@@ -76,7 +76,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1511184059754-e4b5bbbcef75?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Vintage Bolsey C22</h1>
@@ -97,7 +97,7 @@ export default async function HomePage() {
       <div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?q=80&w=1928&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Marsupial Rucksack</h1>
@@ -111,7 +111,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1505941625782-5f8710bdd9f3?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Stained Glass Flower Vase</h1>
@@ -125,7 +125,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1511184059754-e4b5bbbcef75?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Vintage Bolsey C22</h1>
@@ -139,7 +139,7 @@ export default async function HomePage() {
 
           </div>
 
-          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200">
+          <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg">
             <img className="object-cover w-full rounded-xl aspect-square" src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?q=80&w=1928&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">Marsupial Rucksack</h1>
