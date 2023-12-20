@@ -4,11 +4,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import MenuIcon from './MenuIcon';
 import Link from 'next/link';
-
-type Category = {
-    name: string;
-    path: string;
-}
+import { Category } from '@/utils/types'
 
 export default function Menu() {
 
