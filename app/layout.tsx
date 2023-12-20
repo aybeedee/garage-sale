@@ -1,6 +1,7 @@
 import { Outfit } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -30,6 +31,7 @@ export default function RootLayout({
         <main className="min-h-screen flex flex-col items-center">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   )

@@ -77,7 +77,7 @@ export default function Category({ params }: { params: { category: string } }) {
     ];
 
     return (
-        <div className="flex flex-col w-full px-10 py-10 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
+        <div className="flex flex-col w-full px-7 py-10 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
 
             <div className="flex flex-col gap-5 w-full justify-between items-center sm:flex-row sm:gap-0">
                 <h2 className="text-4xl font-extrabold bg-gradient-to-r from-primaryColor to-secondaryColor inline-block text-transparent bg-clip-text capitalize">
