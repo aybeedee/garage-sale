@@ -11,6 +11,7 @@ export default function Menu() {
     const [isOpen, setIsOpen] = useState(false);
     const openMenu = () => setIsOpen(true);
     const closeMenu = () => setIsOpen(false);
+    
     const categories: Category[] = [
         {
             name: "Kitchenware",
