@@ -14,4 +14,5 @@ export type Product = {
 
 export type SortType = {
     type: string;
+    slug: string;
 };

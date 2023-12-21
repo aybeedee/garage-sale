@@ -1,4 +1,4 @@
-export default async function Products() {
+export default async function ProductsPage() {
     
     return (
         <div className="flex-1 w-full flex flex-col items-center">

@@ -4,32 +4,14 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import MenuIcon from './MenuIcon';
 import Link from 'next/link';
-import { Category } from '@/utils/types'
+import { categories } from '@/utils/constants';
+import { Category } from '@/utils/types';
 
 export default function Menu() {
 
     const [isOpen, setIsOpen] = useState(false);
     const openMenu = () => setIsOpen(true);
     const closeMenu = () => setIsOpen(false);
-    
-    const categories: Category[] = [
-        {
-            name: "Kitchenware",
-            path: "kitchenware"
-        },
-        {
-            name: "Home Decor",
-            path: "home-decor"
-        },
-        {
-            name: "Women",
-            path: "women"
-        },
-        {
-            name: "Miscellaneous",
-            path: "miscellaneous"
-        }
-    ];
 
     return (
         <>
