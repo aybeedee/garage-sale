@@ -75,6 +75,5 @@ export default function Menu() {
                 </Dialog>
             </Transition>
         </>
-
     )
 }

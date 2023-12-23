@@ -62,10 +62,11 @@ export default function CategoryPage(
         params,
         searchParams
     }:
-        {
-            params: { category: string };
-            searchParams?: { [key: string]: string | string[] | undefined };
-        }) {
+    {
+        params: { category: string };
+        searchParams?: { [key: string]: string | string[] | undefined };
+    }
+) {
 
     const { sort, q } = searchParams as { [key: string]: string };
     const pathname = usePathname();
@@ -137,7 +138,7 @@ export default function CategoryPage(
                     {params.category}
                 </h2>
                 <p className="text-gray-500">
-                    Showing 37 results
+                    Showing {productsList.length} results
                     {
                         sort ?
                         <> | {(sortingList.find((sortType) => sortType.slug === sort))?.type}</>
