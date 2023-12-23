@@ -83,6 +83,7 @@ export default function CategoryPage(
     let productsList: Product[] = [];
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    // sorting
     if (sort) {
 
         const selectedSortType = sortingList.find((sortType) => sortType.slug === sort)?.slug;
@@ -118,6 +119,13 @@ export default function CategoryPage(
         productsList = sampleProductsList;
     }
 
+    // searching
+    if (q) {
+        productsList = [...productsList].filter(
+            (product) => (product.name.toLowerCase().includes(q.toLowerCase()))
+        );
+    }
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -138,7 +146,7 @@ export default function CategoryPage(
                     {params.category}
                 </h2>
                 <p className="text-gray-500">
-                    Showing {productsList.length} results
+                    Showing {productsList.length} results {q && `for "${q}"`}
                     {
                         sort ?
                         <> | {(sortingList.find((sortType) => sortType.slug === sort))?.type}</>
