@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Product } from '@/utils/types'
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -17,13 +18,17 @@ export default function ProductCard({ product }: { product: Product }) {
                     product.quantity > 0 ?
                         <p className="text-primaryColor font-semibold">In Stock</p>
                         :
-                        <p className="text-gray-500 font-semibold">In Stock</p>
+                        <p className="text-gray-500 font-semibold">Sold Out</p>
                 }
 
             </div>
 
-            <a href="#" className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-gray-900 rounded-md hover:bg-gray-700">View Item</a>
-
+            <Link
+                href={`/product/${product.handle}`}
+                className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-gray-900 rounded-md hover:bg-gray-700"
+            >
+                View Product
+            </Link>
         </div>
     )
 }

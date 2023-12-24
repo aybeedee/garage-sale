@@ -12,8 +12,8 @@ export default function CategoryPage(
         searchParams
     }:
         {
-            params: { category: string };
-            searchParams?: { [key: string]: string | string[] | undefined };
+            params: { category: string; };
+            searchParams?: { [key: string]: string | string[] | undefined; };
         }
 ) {
 
@@ -95,14 +95,14 @@ export default function CategoryPage(
                     {params.category}
                 </h2>
                 <p className="text-gray-500 lg:fixed lg:inset-x-0 lg:w-full lg:h-min lg:flex lg:items-center lg:justify-center">
-                Showing {productsList.length} results {q && `for "${q}"`}
-                {
-                    sort ?
-                        <> | {(sortingList.find((sortType) => sortType.slug === sort))?.type}</>
-                        :
-                        <></>
-                }
-            </p>
+                    Showing {productsList.length} results {q && `for "${q}"`}
+                    {
+                        sort ?
+                            <> | {(sortingList.find((sortType) => sortType.slug === sort))?.type}</>
+                            :
+                            <></>
+                    }
+                </p>
                 <div ref={dropdownRef} className="relative w-full lg:w-auto">
                     <button type="button"
                         className="w-full text-white bg-primaryColor hover:bg-primaryColor/80 focus:ring-4 focus:outline-none focus:ring-primaryColor/20 font-medium rounded-lg text-base px-5 py-2.5 text-center items-center flex justify-center lg:w-36"
