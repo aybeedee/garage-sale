@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" className={`${outfit.variable}`}>
       <body>
         <Navbar />
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="flex flex-col items-center">
           {children}
         </main>
         <Footer />

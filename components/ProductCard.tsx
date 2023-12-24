@@ -6,7 +6,7 @@ export default function ProductCard({ product }: { product: Product }) {
     return (
         <div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg bg-white">
 
-            <img className="object-cover w-full rounded-xl aspect-square" src={product.image} alt="" />
+            <img className="object-cover w-full rounded-xl aspect-square" src={product.images[0]} alt="" />
 
             <h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">{product.name}</h1>
 
