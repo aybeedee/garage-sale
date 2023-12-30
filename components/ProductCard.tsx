@@ -25,10 +25,11 @@ export default function ProductCard({ product }: { product: Product }) {
 
             <Link
                 href={`/product/${product.handle}`}
-                className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-gray-900 rounded-md hover:bg-gray-700"
+                className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
             >
                 View Product
             </Link>
+            
         </div>
     )
 }

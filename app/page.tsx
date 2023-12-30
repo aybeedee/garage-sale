@@ -15,7 +15,7 @@ export default async function HomePage() {
             <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row">
               <Link
                 href="/products"
-                className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-gray-900 rounded-lg focus:outline-none hover:bg-gray-700 focus:ring focus:ring-gray-300 focus:ring-opacity-80 md:w-auto"
+                className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
               >
                 Shop Now
               </Link>
