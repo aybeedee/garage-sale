@@ -42,7 +42,7 @@ export default async function HomePage() {
 
       <div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-          {sampleProductsList.slice(0, 4).map((product: Product, index) => (
+          {sampleProductsList.slice(0, 4).map((product: Product, index: number) => (
             <ProductCard key={index} product={product} />
           ))}
         </div>
@@ -51,7 +51,7 @@ export default async function HomePage() {
       <div className="h-[24rem] w-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur" />
       <div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-          {sampleProductsList.slice(6, 10).map((product: Product, index) => (
+          {sampleProductsList.slice(6, 10).map((product: Product, index: number) => (
             <ProductCard key={index} product={product} />
           ))}
         </div>

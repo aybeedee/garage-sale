@@ -49,7 +49,7 @@ export default function Menu() {
                                 </button>
                             </div>
                             <ul className="flex w-full flex-col">
-                                {categories.map((category: Category, index) => (
+                                {categories.map((category: Category, index: number) => (
                                     <li key={index}>
                                         <div className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
                                             <Link

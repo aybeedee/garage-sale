@@ -115,7 +115,7 @@ export default function ProductsPage(
                         openSortSelect &&
                         <div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-lg w-full text-center">
                             <ul className="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
-                                {sortingList.map((sortType: SortType, index) => (
+                                {sortingList.map((sortType: SortType, index: number) => (
                                     <li key={index}>
                                         <a
                                             href={
@@ -142,7 +142,7 @@ export default function ProductsPage(
 
             <div className="mx-auto min-h-screen mt-6">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
-                    {productsList.map((product: Product, index) => (
+                    {productsList.map((product: Product, index: number) => (
                         <ProductCard key={index} product={product} />
                     ))}
                 </div>

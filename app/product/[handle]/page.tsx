@@ -21,9 +21,9 @@ export default function ProductPage(
     return notFound();
   }
 
-  const [accordionOpen, setAccordionOpen] = useState(false);
-  const [itemCount, setItemCount] = useState(1);
-  const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
+  const [itemCount, setItemCount] = useState<number>(1);
+  const [mainImageIndex, setMainImageIndex] = useState<number>(0);
 
   return (
     <div className="w-full items-center px-2 py-12 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur 2xl:px-10">
@@ -34,7 +34,7 @@ export default function ProductPage(
 
           <div className="flex items-center justify-center my-8 gap-4 mt-4 sm:gap-8 sm:mt-8 grow shrink 2xl:grow-0 2xl:shrink-0 lg:my-0 lg:flex-col lg:items-end h-full">
             {
-              product.images.map((imageSrc, index) => (
+              product.images.map((imageSrc, index: number) => (
                 (mainImageIndex !== index) &&
                 <img
                   key={index}

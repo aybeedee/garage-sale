@@ -4,7 +4,7 @@ export default async function Footer() {
     <footer className="bg-white w-full border-t border-gray-200">
       <div className="container px-7 py-12 mx-auto">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
-          <div className="sm:col-span-2">
+          <div className="min-[450px]:col-span-2">
             <h1 className="max-w-lg text-xl font-semibold tracking-tight text-gray-800 xl:text-2xl">Subscribe to get notified of special offers.</h1>
 
             <div className="flex flex-col mx-auto mt-6 space-y-3 md:space-y-0 md:flex-row">
