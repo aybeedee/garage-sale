@@ -2,8 +2,18 @@ import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { Product } from '@/utils/types';
 import { sampleProductsList } from '@/utils/constants';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import Snackbar from '@/components/Snackbar';
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: { searchParams: { message: string } }) {
+
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <div className="flex-1 w-full flex flex-col items-center mb-12">
@@ -19,7 +29,12 @@ export default async function HomePage() {
               >
                 Shop Now
               </Link>
-              <a href="#" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">Sign Up</a>
+              {
+                user ?
+                  <a href="/profile/orders" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">My Orders</a>
+                  :
+                  <a href="/login" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">Sign Up</a>
+              }
             </div>
           </div>
         </div>
@@ -56,6 +71,8 @@ export default async function HomePage() {
           ))}
         </div>
       </div>
+
+      <Snackbar type={searchParams?.message} email={user?.email} />
     </div>
   )
 }

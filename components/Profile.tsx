@@ -14,6 +14,7 @@ export default async function Profile() {
 
     return user ? (
         <button className="py-2 px-2 rounded-md no-underline bg-inherit hover:text-white border-black hover:bg-[#363636] border text-black">
+            {/* <p>{user.email ? user.email : ''}</p> */}
             <ProfileIcon />
         </button>
     ) : (
