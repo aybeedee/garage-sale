@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useRef, useState } from 'react';
 import { notFound, usePathname } from 'next/navigation';
@@ -118,7 +118,7 @@ export default function CategoryPage(
 
                     {
                         openSortSelect &&
-                        <div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-lg w-full text-center">
+                        <div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-lg w-full text-center animate-out">
                             <ul className="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
                                 {sortingList.map((sortType: SortType, index: number) => (
                                     <li key={index}>

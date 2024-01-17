@@ -3,6 +3,11 @@ export type Category = {
     path: string;
 };
 
+export type ProfileMenuOption = {
+    name: string;
+    path: string;
+};
+
 export type Product = {
     id: string;
     handle: string;

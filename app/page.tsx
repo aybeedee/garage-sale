@@ -31,7 +31,7 @@ export default async function HomePage({ searchParams }: { searchParams: { messa
               </Link>
               {
                 user ?
-                  <a href="/profile/orders" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">My Orders</a>
+                  <a href="/orders" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">My Orders</a>
                   :
                   <a href="/login" className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg lg:mx-4 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80 md:w-auto">Sign Up</a>
               }

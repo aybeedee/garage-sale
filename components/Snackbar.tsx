@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -10,7 +10,7 @@ export default function Snackbar({ type, email }: { type: string; email: string 
     useEffect(() => {
         setTimeout(() => {
             setSnackBarOpen(!snackBarOpen);
-        }, 5000);
+        }, 10000);
     }, []);
 
     return (
@@ -21,14 +21,14 @@ export default function Snackbar({ type, email }: { type: string; email: string 
             {
                 type === "signed-in" ?
                     <Link
-                        href="/profile/orders"
+                        href="/orders"
                         className="block px-4 py-2.5 max-sm:w-full max-sm:text-xs text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
                     >
                         View My Orders
                     </Link>
                     : type === "signed-up" ?
                         <Link
-                            href="/profile/address"
+                            href="/address"
                             className="block px-4 py-2.5 max-sm:w-full max-sm:text-xs text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
                         >
                             Set Delivery Address

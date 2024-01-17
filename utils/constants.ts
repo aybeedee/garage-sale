@@ -1,4 +1,4 @@
-import { Category, SortType, Product } from '@/utils/types';
+import { Category, SortType, Product, ProfileMenuOption } from '@/utils/types';
 
 export const categories: Category[] = [
     {
@@ -31,6 +31,21 @@ export const sortingList: SortType[] = [
     {
         type: "Price: High to Low",
         slug: "price-desc",
+    }
+];
+
+export const profileMenuList: ProfileMenuOption[] = [
+    {
+        name: "My Orders",
+        path: "orders",
+    },
+    {
+        name: "Edit Address",
+        path: "address",
+    },
+    {
+        name: "Settings",
+        path: "settings",
     }
 ];
 
