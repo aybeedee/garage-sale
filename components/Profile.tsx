@@ -22,6 +22,7 @@ export default async function Profile() {
         await supabase.auth.signOut();
         return redirect('/login');
     }
+
     return user ? (
         <ProfileMenu email={user?.email} signOut={signOut} />
     ) : (
