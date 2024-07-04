@@ -81,11 +81,10 @@ export default function ProductPage({
             <div className="rounded-md border border-neutral-200 bg-white">
               <h2 className="mb-0">
                 <button
-                  className={`${
-                    accordionOpen
+                  className={`${accordionOpen
                       ? `[box-shadow:inset_0_-1px_0_rgba(229,231,235)]`
                       : `transition-none rounded-b-md`
-                  } group relative flex w-full items-center rounded-t-md border-0 bg-white px-3 py-2 sm:px-5 sm:py-4 text-left text-base sm:text-lg font-normal text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none`}
+                    } group relative flex w-full items-center rounded-t-md border-0 bg-white px-3 py-2 sm:px-5 sm:py-4 text-left text-base sm:text-lg font-normal text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none`}
                   type="button"
                   onClick={() => {
                     setAccordionOpen(!accordionOpen);
@@ -93,11 +92,10 @@ export default function ProductPage({
                 >
                   Shipping & Returns
                   <span
-                    className={`${
-                      accordionOpen
+                    className={`${accordionOpen
                         ? `rotate-[-180deg] -mr-1`
                         : `rotate-0 fill-[#212529]`
-                    } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none`}
+                      } ml-auto h-5 w-5 shrink-0 fill-[#336dec] transition-transform duration-200 ease-in-out motion-reduce:transition-none`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
