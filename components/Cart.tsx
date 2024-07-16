@@ -1,24 +1,25 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import CartIcon from "./CartIcon";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 export default function Cart({ user }: { user: User | null }) {
-	const [isOpen, setIsOpen] = useState(false);
+	const { isCartOpen, toggleCartOpen } = useCart();
 	const router = useRouter();
 
 	const openCart = () => {
 		if (!user) {
 			router.push("/login");
 		} else {
-			setIsOpen(true);
+			toggleCartOpen(true);
 		}
 	};
 
-	const closeCart = () => setIsOpen(false);
+	const closeCart = () => toggleCartOpen(false);
 
 	return (
 		<>
@@ -28,7 +29,7 @@ export default function Cart({ user }: { user: User | null }) {
 			>
 				<CartIcon />
 			</button>
-			<Transition show={isOpen}>
+			<Transition show={isCartOpen}>
 				<Dialog onClose={closeCart} className="relative z-50">
 					<Transition.Child
 						as={Fragment}

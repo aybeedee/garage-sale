@@ -5,6 +5,7 @@ import { notFound, useRouter } from "next/navigation";
 import { sampleProductsList } from "@/utils/constants";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { useCart } from "@/context/CartContext";
 
 export default function ProductPage({
 	params,
@@ -23,6 +24,18 @@ export default function ProductPage({
 	const [itemCount, setItemCount] = useState<number>(1);
 	const [mainImageIndex, setMainImageIndex] = useState<number>(0);
 	const [user, setUser] = useState<User | null>(null);
+	const { toggleCartOpen } = useCart();
+	// { product_id: count, ... }
+	// cartLS: cart local storage
+	const [cartLS, setCartLS] = useState<{ [key: string]: number }>(() => {
+		let currentValue;
+		try {
+			currentValue = JSON.parse(localStorage.getItem("cart") || String({}));
+		} catch (error) {
+			currentValue = {};
+		}
+		return currentValue;
+	});
 
 	const router = useRouter();
 	const supabase = createClient();
@@ -33,6 +46,13 @@ export default function ProductPage({
 		} else {
 			console.log("add to cart");
 			// todo: add to cart functionality
+			// - set cart (and local storage as a consequence)
+			// - open cart (shows the item added as cart gets it from local storage)
+			setCartLS((prevState) => ({
+				...prevState,
+				[product.id]: itemCount,
+			}));
+			toggleCartOpen(true);
 		}
 	};
 
@@ -60,6 +80,10 @@ export default function ProductPage({
 		fetchUser();
 		// add supabase to dependencies array ?
 	}, []);
+
+	useEffect(() => {
+		localStorage.setItem("cart", JSON.stringify(cartLS));
+	}, [cartLS]);
 
 	return (
 		<div className="w-full items-center px-2 py-12 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur 2xl:px-10">
