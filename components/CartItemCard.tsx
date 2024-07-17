@@ -48,7 +48,7 @@ export default function CartItemCard({
 						</svg>
 					</button>
 					<span className="text-base text-black bg-white h-full w-full px-4 py-2 sm:px-6 sm:py-3 border border-neutral-800">
-						{cartItem.quantity}
+						{cartItem.purchaseQuantity}
 					</span>
 					<button
 						type="button"

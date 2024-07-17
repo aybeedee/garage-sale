@@ -40,6 +40,7 @@ export type CartItem = {
 	handle: string;
 	name: string;
 	price: number;
-	quantity: number;
+	purchaseQuantity: number;
+	maxQuantity: number;
 	image: string;
 };

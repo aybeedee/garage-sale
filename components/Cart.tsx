@@ -7,7 +7,6 @@ import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import CartItemCard from "./CartItemCard";
-import { CartItem } from "@/utils/types";
 
 export default function Cart({ user }: { user: User | null }) {
 	const { cart, updateCart, isCartOpen, toggleCartOpen } = useCart();

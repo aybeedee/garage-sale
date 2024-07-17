@@ -37,22 +37,26 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 	) => {
 		switch (action) {
 			case "increment":
-				setCart((prevState) => ({
-					...prevState,
-					[productId]: {
-						...prevState[productId],
-						quantity: prevState[productId].quantity + 1,
-					},
-				}));
+				if (cart[productId].purchaseQuantity < cart[productId].maxQuantity) {
+					setCart((prevState) => ({
+						...prevState,
+						[productId]: {
+							...prevState[productId],
+							purchaseQuantity: prevState[productId].purchaseQuantity + 1,
+						},
+					}));
+				}
 				break;
 			case "decrement":
-				setCart((prevState) => ({
-					...prevState,
-					[productId]: {
-						...prevState[productId],
-						quantity: prevState[productId].quantity - 1,
-					},
-				}));
+				if (cart[productId].purchaseQuantity > 1) {
+					setCart((prevState) => ({
+						...prevState,
+						[productId]: {
+							...prevState[productId],
+							purchaseQuantity: prevState[productId].purchaseQuantity - 1,
+						},
+					}));
+				}
 				break;
 			case "remove":
 				setCart((prevState) => {

@@ -38,7 +38,8 @@ export default function ProductPage({
 				handle: product.handle,
 				name: product.name,
 				price: product.price,
-				quantity: itemCount,
+				purchaseQuantity: itemCount,
+				maxQuantity: product.quantity,
 				image: product.images[0],
 			});
 			toggleCartOpen(true);
