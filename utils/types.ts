@@ -27,4 +27,19 @@ export type SortType = {
 export type CartContextType = {
 	isCartOpen: boolean;
 	toggleCartOpen: (open: boolean) => void;
+	cart: { [productId: string]: CartItem };
+	updateCart: (
+		productId: string,
+		action: "increment" | "decrement" | "remove"
+	) => void;
+	addToCart: (cartItem: CartItem) => void;
+};
+
+export type CartItem = {
+	id: string;
+	handle: string;
+	name: string;
+	price: number;
+	quantity: number;
+	image: string;
 };

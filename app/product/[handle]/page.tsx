@@ -24,34 +24,23 @@ export default function ProductPage({
 	const [itemCount, setItemCount] = useState<number>(1);
 	const [mainImageIndex, setMainImageIndex] = useState<number>(0);
 	const [user, setUser] = useState<User | null>(null);
-	const { toggleCartOpen } = useCart();
-	// { product_id: count, ... }
-	// cartLS: cart local storage
-	const [cartLS, setCartLS] = useState<{ [key: string]: number }>(() => {
-		let currentValue;
-		try {
-			currentValue = JSON.parse(localStorage.getItem("cart") || String({}));
-		} catch (error) {
-			currentValue = {};
-		}
-		return currentValue;
-	});
+	const { addToCart, toggleCartOpen } = useCart();
 
 	const router = useRouter();
 	const supabase = createClient();
 
-	const addToCart = () => {
+	const handleAddToCart = () => {
 		if (!user) {
 			router.push("/login");
 		} else {
-			console.log("add to cart");
-			// todo: add to cart functionality
-			// - set cart (and local storage as a consequence)
-			// - open cart (shows the item added as cart gets it from local storage)
-			setCartLS((prevState) => ({
-				...prevState,
-				[product.id]: itemCount,
-			}));
+			addToCart({
+				id: product.id,
+				handle: product.handle,
+				name: product.name,
+				price: product.price,
+				quantity: itemCount,
+				image: product.images[0],
+			});
 			toggleCartOpen(true);
 		}
 	};
@@ -80,10 +69,6 @@ export default function ProductPage({
 		fetchUser();
 		// add supabase to dependencies array ?
 	}, []);
-
-	useEffect(() => {
-		localStorage.setItem("cart", JSON.stringify(cartLS));
-	}, [cartLS]);
 
 	return (
 		<div className="w-full items-center px-2 py-12 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur 2xl:px-10">
@@ -254,7 +239,7 @@ export default function ProductPage({
 							</div>
 
 							<button
-								onClick={addToCart}
+								onClick={handleAddToCart}
 								className="max-sm:min-w-[50%] max-sm:max-w-[50%] max-2xl:min-w-[55%] max-2xl:max-w-[55%] w-full xl:ml-10 block px-5 text-base sm:text-lg font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
 							>
 								Add to Cart
