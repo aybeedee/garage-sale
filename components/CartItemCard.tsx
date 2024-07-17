@@ -1,36 +1,32 @@
 import Link from "next/link";
 import { CartItem } from "@/utils/types";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
-export default function CartItemCard({
-	cartItem,
-	handleUpdateCart,
-}: {
-	cartItem: CartItem;
-	handleUpdateCart: (
-		productId: string,
-		action: "increment" | "decrement" | "remove"
-	) => void;
-}) {
+export default function CartItemCard({ cartItem }: { cartItem: CartItem }) {
+	const { updateCart, toggleCartOpen } = useCart();
+	const router = useRouter();
+
 	return (
-		<div className="flex flex-row">
-			<Link href={`/product/${cartItem.handle}`} className="">
-				<img
-					className="object-cover w-full rounded-xl aspect-square"
-					src={cartItem.image}
-				/>
-			</Link>
+		<div className="flex flex-row gap-4 items-center border-b border-gray-300 pb-4 relative">
+			<img
+				className="object-cover w-16 h-16 rounded-xl aspect-square"
+				src={cartItem.image}
+				onClick={() => {
+					router.push(`/product/${cartItem.handle}`);
+					toggleCartOpen(true);
+				}}
+			/>
 			<div className="flex flex-col">
-				<h1 className="text-2xl font-semibold text-gray-700">
-					{cartItem.name}
-				</h1>
-				<p className="text-gray-500">
+				<h1 className="text-xl max-w-[9rem] font-normal">{cartItem.name}</h1>
+				<p className="text-gray-500 mb-3">
 					Price {"(1 unit)"}: Rs. {cartItem.price}
 				</p>
-				<div className="h-full xs:w-full rounded-md inline-flex items-center justify-between bg-neutral-800">
+				<div className="h-min w-min rounded-md inline-flex items-center justify-between bg-neutral-800">
 					<button
 						type="button"
-						className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125"
-						onClick={() => handleUpdateCart(cartItem.id, "decrement")}
+						className="text-white transition duration-200 px-2 hover:scale-125"
+						onClick={() => updateCart(cartItem.id, "decrement")}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -47,13 +43,13 @@ export default function CartItemCard({
 							></path>
 						</svg>
 					</button>
-					<span className="text-base text-black bg-white h-full w-full px-4 py-2 sm:px-6 sm:py-3 border border-neutral-800">
+					<span className="text-base text-black bg-white h-full w-full px-3 py-2 border border-neutral-800">
 						{cartItem.purchaseQuantity}
 					</span>
 					<button
 						type="button"
-						className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125"
-						onClick={() => handleUpdateCart(cartItem.id, "increment")}
+						className="text-white transition duration-200 px-2 hover:scale-125"
+						onClick={() => updateCart(cartItem.id, "increment")}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -72,6 +68,24 @@ export default function CartItemCard({
 					</button>
 				</div>
 			</div>
+			<button
+				onClick={() => updateCart(cartItem.id, "remove")}
+				className="py-1 px-1 bg-[#363636] justify-center rounded-md no-underline text-white absolute top-0 right-0"
+			>
+				<svg
+					width="14px"
+					height="14px"
+					viewBox="0 0 24 24"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					className="hover:scale-110 transition-all ease-in-out"
+				>
+					<path
+						d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z"
+						fill="currentColor"
+					/>
+				</svg>
+			</button>
 		</div>
 	);
 }

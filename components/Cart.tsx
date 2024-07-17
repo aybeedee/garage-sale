@@ -7,9 +7,10 @@ import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import CartItemCard from "./CartItemCard";
+import Link from "next/link";
 
 export default function Cart({ user }: { user: User | null }) {
-	const { cart, updateCart, isCartOpen, toggleCartOpen } = useCart();
+	const { cart, isCartOpen, toggleCartOpen } = useCart();
 	const router = useRouter();
 
 	const openCart = () => {
@@ -21,11 +22,6 @@ export default function Cart({ user }: { user: User | null }) {
 	};
 
 	const closeCart = () => toggleCartOpen(false);
-
-	const handleUpdateCart = (
-		productId: string,
-		action: "increment" | "decrement" | "remove"
-	) => updateCart(productId, action);
 
 	return (
 		<>
@@ -80,14 +76,23 @@ export default function Cart({ user }: { user: User | null }) {
 									</button>
 								</div>
 								{cart !== null && Object.keys(cart).length > 0 ? (
-									<div className="flex flex-col">
-										{Object.entries(cart).map(([productId, cartItem]) => (
-											<CartItemCard
-												cartItem={cartItem}
-												handleUpdateCart={handleUpdateCart}
-												key={productId}
-											/>
-										))}
+									<div className="flex flex-col h-full">
+										<h1 className="w-full text-center text-3xl font-semibold mt-2 mb-8">
+											My Cart
+										</h1>
+										<div className="flex flex-col justify-between h-full">
+											<div className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto px-2">
+												{Object.entries(cart).map(([productId, cartItem]) => (
+													<CartItemCard cartItem={cartItem} key={productId} />
+												))}
+											</div>
+											<Link
+												href={`/checkout`}
+												className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
+											>
+												Checkout
+											</Link>
+										</div>
 									</div>
 								) : (
 									<div className="h-full w-full flex justify-center items-center text-2xl text-gray-400">
