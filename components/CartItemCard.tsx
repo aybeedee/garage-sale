@@ -10,11 +10,11 @@ export default function CartItemCard({ cartItem }: { cartItem: CartItem }) {
 	return (
 		<div className="flex flex-row gap-4 items-center border-b border-gray-300 pb-4 relative">
 			<img
-				className="object-cover w-16 h-16 rounded-xl aspect-square"
+				className="object-cover w-16 h-16 rounded-xl aspect-square cursor-pointer"
 				src={cartItem.image}
 				onClick={() => {
 					router.push(`/product/${cartItem.handle}`);
-					toggleCartOpen(true);
+					toggleCartOpen(false);
 				}}
 			/>
 			<div className="flex flex-col">
