@@ -52,6 +52,15 @@ export default async function Login({
 			password,
 			options: {
 				emailRedirectTo: `${origin}/auth/callback`,
+				data: {
+					first_name: null,
+					last_name: null,
+					phone_number: null,
+					address_line_1: null,
+					address_line_2: null,
+					country: null,
+					postal_code: null,
+				},
 			},
 		});
 
@@ -91,6 +100,7 @@ export default async function Login({
 					type="password"
 					name="password"
 					placeholder="••••••••"
+					minLength={6}
 					required
 				/>
 				<button className="w-full px-5 py-2 mb-1 text-base sm:text-lg font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700">

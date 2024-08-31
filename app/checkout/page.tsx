@@ -20,6 +20,17 @@ export default function Checkout() {
 		}
 	};
 
+	// const testThing = async () => {
+	// 	try {
+	// 		const { data, error } = await supabase.auth.updateUser({
+	// 			data: { first_name: "abdullah" },
+	// 		});
+	// 		console.log(data);
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// };
+
 	useEffect(() => {
 		fetchUser();
 	}, [supabase]);
@@ -30,6 +41,7 @@ export default function Checkout() {
 				<h1 className="text-4xl font-bold text-center text-gray-800 lg:text-5xl">
 					Checkout
 				</h1>
+				{/* <button onClick={testThing}>Test</button> */}
 				<div className="flex justify-center mx-auto mt-6">
 					<span className="inline-block w-40 h-1 bg-gradient-to-r from-primaryColor to-secondaryColor rounded-full"></span>
 					<span className="inline-block w-3 h-1 mx-1 bg-primaryColor rounded-full"></span>
