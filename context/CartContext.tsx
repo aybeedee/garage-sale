@@ -66,7 +66,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 				});
 				break;
 			default:
-				throw new Error("invalid cart action");
+				throw new Error("Invalid cart action");
 		}
 	};
 
@@ -86,7 +86,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 export const useCart = () => {
 	const context = useContext(CartContext);
 	if (!context) {
-		throw new Error("useCart must be used within a CartProvider");
+		throw new Error("Hook must be used within CartProvider");
 	}
 	return context;
 };
