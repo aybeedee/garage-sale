@@ -86,12 +86,15 @@ export default function Cart({ user }: { user: User | null }) {
 													<CartItemCard cartItem={cartItem} key={productId} />
 												))}
 											</div>
-											<Link
-												href={`/checkout`}
+											<button
+												onClick={() => {
+													router.push("/checkout");
+													toggleCartOpen(false);
+												}}
 												className="mt-4 block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
 											>
 												Checkout
-											</Link>
+											</button>
 										</div>
 									</div>
 								) : (
