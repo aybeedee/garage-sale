@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { notFound, usePathname } from "next/navigation";
-import { Product, SortType } from "@/utils/types";
+import { Product, SortType } from "@/utils/app.types";
 import ProductCard from "@/components/ProductCard";
 import { sortingList, categories, sampleProductsList } from "@/utils/constants";
 

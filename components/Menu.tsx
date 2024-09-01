@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import MenuIcon from "./MenuIcon";
 import Link from "next/link";
 import { categories } from "@/utils/constants";
-import { Category } from "@/utils/types";
+import { Category } from "@/utils/app.types";
 
 export default function Menu() {
 	const [isOpen, setIsOpen] = useState(false);

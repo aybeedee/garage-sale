@@ -1,4 +1,9 @@
-import { Category, SortType, Product, ProfileMenuOption } from "@/utils/types";
+import {
+	Category,
+	SortType,
+	Product,
+	ProfileMenuOption,
+} from "@/utils/app.types";
 
 export const categories: Category[] = [
 	{

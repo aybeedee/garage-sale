@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ProfileMenuOption } from "@/utils/types";
+import { ProfileMenuOption } from "@/utils/app.types";
 import { profileMenuList } from "@/utils/constants";
 import ProfileIcon from "./ProfileIcon";
 

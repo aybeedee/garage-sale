@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CartItem } from "@/utils/types";
+import { CartItem } from "@/utils/app.types";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 

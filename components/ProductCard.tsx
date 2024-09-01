@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Product } from "@/utils/types";
+import { Product } from "@/utils/app.types";
 
 export default function ProductCard({ product }: { product: Product }) {
 	return (
