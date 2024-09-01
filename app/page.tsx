@@ -1,8 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { Product } from "@/utils/app.types";
 import { Tables } from "@/utils/database.types";
-import { sampleProductsList } from "@/utils/constants";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import Snackbar from "@/components/Snackbar";

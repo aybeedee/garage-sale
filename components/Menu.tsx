@@ -4,8 +4,6 @@ import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import MenuIcon from "./MenuIcon";
 import Link from "next/link";
-import { categories as categories2 } from "@/utils/constants";
-import { Category } from "@/utils/app.types";
 import { createClient } from "@/utils/supabase/client";
 import { Tables } from "@/utils/database.types";
 
@@ -28,7 +26,6 @@ export default function Menu() {
 				setError(error);
 				return;
 			}
-			console.log(data);
 			setCategories(data);
 		} catch (error) {
 			setError(error);
