@@ -24,6 +24,7 @@ gp.txt
 /.vscode
 *.excalidraw
 /product-images
+/fodder
 
 # debug
 npm-debug.log*

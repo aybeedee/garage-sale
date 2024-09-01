@@ -1,16 +1,43 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import MenuIcon from "./MenuIcon";
 import Link from "next/link";
-import { categories } from "@/utils/constants";
+import { categories as categories2 } from "@/utils/constants";
 import { Category } from "@/utils/app.types";
+import { createClient } from "@/utils/supabase/client";
+import { Tables } from "@/utils/database.types";
 
 export default function Menu() {
+	const [categories, setCategories] = useState<Tables<"category">[] | null>(
+		null
+	);
+	const [error, setError] = useState<any>(null);
 	const [isOpen, setIsOpen] = useState(false);
+
+	const supabase = createClient();
+
 	const openMenu = () => setIsOpen(true);
 	const closeMenu = () => setIsOpen(false);
+
+	const fetchCategories = async () => {
+		try {
+			const { data, error } = await supabase.from("category").select("*");
+			if (error) {
+				setError(error);
+				return;
+			}
+			console.log(data);
+			setCategories(data);
+		} catch (error) {
+			setError(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchCategories();
+	}, [supabase]);
 
 	return (
 		<>
@@ -64,19 +91,44 @@ export default function Menu() {
 								</button>
 							</div>
 							<ul className="flex w-full flex-col">
-								{categories.map((category: Category, index: number) => (
-									<li key={index}>
-										<div className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
-											<Link
-												href={`/products/${category.path}`}
-												onClick={closeMenu}
-											>
-												{category.name}
-											</Link>
-										</div>
-										<hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
-									</li>
-								))}
+								{error !== null ? (
+									<div className="flex flex-col justify-center items-center gap-2">
+										<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+											Oops
+										</h1>
+										<p className="text-lg text-center">
+											An unexpected error occured :/ Try reloading the page.
+										</p>
+									</div>
+								) : categories?.length ? (
+									<>
+										{categories.map(
+											(category: Tables<"category">, index: number) => (
+												<li key={index}>
+													<div className="py-4 text-xl text-black transition-colors hover:text-neutral-500">
+														<Link
+															href={`/products/${category.path}`}
+															onClick={closeMenu}
+														>
+															{category.name}
+														</Link>
+													</div>
+													<hr className="h-[0.5px] my-1 dark:bg-gray-700"></hr>
+												</li>
+											)
+										)}
+									</>
+								) : (
+									<div className="flex flex-col justify-center items-center gap-2">
+										<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+											No Categories Found
+										</h1>
+										<p className="text-lg text-center">
+											Could not fetch any categories. Contact support for more
+											information.
+										</p>
+									</div>
+								)}
 							</ul>
 							<div className="mt-auto text-black transition-colors duration-300 hover:text-primaryColor">
 								<svg
