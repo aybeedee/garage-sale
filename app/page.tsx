@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/utils/app.types";
+import { Tables } from "@/utils/database.types";
 import { sampleProductsList } from "@/utils/constants";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
@@ -17,6 +18,11 @@ export default async function HomePage({
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
+
+	const { data, error } = await supabase
+		.from("product")
+		.select("*")
+		.eq("is_released", true);
 
 	return (
 		<div className="flex-1 w-full flex flex-col items-center mb-12">
@@ -90,26 +96,52 @@ export default async function HomePage({
 				</div>
 			</div>
 
-			<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
-				<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-					{sampleProductsList
-						.slice(0, 4)
-						.map((product: Product, index: number) => (
-							<ProductCard key={index} product={product} />
-						))}
+			{error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 h-[24rem] px-6 -mt-72 sm:-mt-80 md:-mt-96 z-10">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						Oops
+					</h1>
+					<p className="text-lg text-center">
+						An unexpected error occured :/ Try reloading the page.
+					</p>
 				</div>
-			</div>
+			) : data?.length ? (
+				<>
+					<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
+						<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
+							{data
+								.slice(0, 4)
+								.map((product: Tables<"product">, index: number) => (
+									<ProductCard key={index} product={product} />
+								))}
+						</div>
+					</div>
 
-			<div className="h-[24rem] w-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur" />
-			<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
-				<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-					{sampleProductsList
-						.slice(6, 10)
-						.map((product: Product, index: number) => (
-							<ProductCard key={index} product={product} />
-						))}
+					{data.length > 4 && (
+						<>
+							<div className="h-[24rem] w-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur" />
+							<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
+								<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
+									{data
+										.slice(4, 8)
+										.map((product: Tables<"product">, index: number) => (
+											<ProductCard key={index} product={product} />
+										))}
+								</div>
+							</div>
+						</>
+					)}
+				</>
+			) : (
+				<div className="flex flex-col justify-center items-center gap-2 h-[24rem] px-6 -mt-72 sm:-mt-80 md:-mt-96 z-10">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						No Products Found
+					</h1>
+					<p className="text-lg text-center">
+						Could not fetch any products. Contact support for more information.
+					</p>
 				</div>
-			</div>
+			)}
 
 			<Snackbar type={searchParams?.message} email={user?.email} />
 		</div>

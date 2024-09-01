@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { Product } from "@/utils/app.types";
+import { Tables } from "@/utils/database.types";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+	product,
+}: {
+	product: Tables<"product">;
+}) {
 	return (
 		<div className="flex flex-col p-4 border sm:p-6 rounded-xl border-gray-200 shadow-lg bg-white">
 			<img
@@ -17,7 +22,7 @@ export default function ProductCard({ product }: { product: Product }) {
 			<div className="flex flex-row justify-between mt-2">
 				<p className="text-gray-500">Rs. {product.price}</p>
 
-				{product.quantity > 0 ? (
+				{product.is_in_stock ? (
 					<p className="text-primaryColor font-semibold">In Stock</p>
 				) : (
 					<p className="text-gray-500 font-semibold">Sold Out</p>
