@@ -14,15 +14,27 @@ export default async function HomePage({
 }) {
 	const cookieStore = cookies();
 	const supabase = createClient(cookieStore);
+	let error: any = null;
+	let products: Tables<"product">[] | null = null;
 
+	// TODO: these need try/catches too no? will have to refactor everywhere if so
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	const { data, error } = await supabase
-		.from("product")
-		.select("*")
-		.eq("is_released", true);
+	try {
+		const { data, error: queryError } = await supabase
+			.from("product")
+			.select("*")
+			.eq("is_released", true);
+		if (error) {
+			error = queryError;
+		} else {
+			products = data;
+		}
+	} catch (catchError) {
+		error = catchError;
+	}
 
 	return (
 		<div className="flex-1 w-full flex flex-col items-center mb-12">
@@ -105,11 +117,11 @@ export default async function HomePage({
 						An unexpected error occured :/ Try reloading the page.
 					</p>
 				</div>
-			) : data?.length ? (
+			) : products?.length ? (
 				<>
 					<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
 						<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-							{data
+							{products
 								.slice(0, 4)
 								.map((product: Tables<"product">, index: number) => (
 									<ProductCard key={index} product={product} />
@@ -117,12 +129,12 @@ export default async function HomePage({
 						</div>
 					</div>
 
-					{data.length > 4 && (
+					{products.length > 4 && (
 						<>
 							<div className="h-[24rem] w-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur" />
 							<div className="container px-6 py-10 mx-auto -mt-72 sm:-mt-80 md:-mt-96 z-10">
 								<div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-									{data
+									{products
 										.slice(4, 8)
 										.map((product: Tables<"product">, index: number) => (
 											<ProductCard key={index} product={product} />
