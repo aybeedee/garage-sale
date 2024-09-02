@@ -37,7 +37,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 	) => {
 		switch (action) {
 			case "increment":
-				if (cart[productId].purchaseQuantity < cart[productId].maxQuantity) {
+				if (cart[productId].purchaseQuantity < cart[productId].stockQuantity) {
 					setCart((prevState) => ({
 						...prevState,
 						[productId]: {

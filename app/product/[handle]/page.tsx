@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { notFound, useRouter } from "next/navigation";
-import { sampleProductsList } from "@/utils/constants";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useCart } from "@/context/CartContext";
@@ -29,15 +28,17 @@ export default function ProductPage({
 		if (!user) {
 			router.push("/login");
 		} else {
-			addToCart({
-				id: product.id,
-				handle: product.handle,
-				name: product.name,
-				price: product.price,
-				purchaseQuantity: itemCount,
-				maxQuantity: product.quantity,
-				image: product.images[0],
-			});
+			if (product) {
+				addToCart({
+					id: product.id,
+					handle: product.handle,
+					name: product.name,
+					price: product.price,
+					purchaseQuantity: itemCount,
+					stockQuantity: product.stock_quantity,
+					image: product.images[0],
+				});
+			}
 			toggleCartOpen(true);
 		}
 	};
@@ -74,7 +75,6 @@ export default function ProductPage({
 			}
 			if (data?.length) {
 				setProduct(data[0]);
-				console.log(data);
 			}
 		} catch (error) {
 			setError(error);
@@ -106,7 +106,7 @@ export default function ProductPage({
 				<div className="flex flex-row justify-center w-[100%] p-4 sm:py-10 sm:px-12 2xl:px-24 rounded-xl border border-gray-200 shadow-lg bg-white max-lg:flex-wrap">
 					<div className="flex flex-col-reverse w-full lg:float-left box-border h-full lg:min-w-[55%] lg:flex-row">
 						<div className="flex items-center justify-center my-8 gap-4 mt-4 sm:gap-8 sm:mt-8 grow shrink 2xl:grow-0 2xl:shrink-0 lg:my-0 lg:flex-col lg:items-end h-full">
-							{product?.images.map(
+							{product.images.map(
 								(imageSrc, index: number) =>
 									mainImageIndex !== index && (
 										<img
@@ -123,7 +123,7 @@ export default function ProductPage({
 
 						<div className="flex justify-center lg:justify-start rounded-xl lg:ml-8 grow shrink basis-auto relative box-border h-full">
 							<img
-								src={product?.images[mainImageIndex]}
+								src={product.images[mainImageIndex]}
 								className="object-contain h-full sm:max-h-[75vh] rounded-xl"
 							/>
 						</div>
@@ -135,14 +135,14 @@ export default function ProductPage({
 								NEW
 							</p>
 							<h1 className="font-semibold text-4xl sm:text-5xl mb-4">
-								{product?.name}
+								{product.name}
 							</h1>
 
 							<div className="flex justify-between mb-3">
 								<h2 className="font-semibold text-2xl sm:text-3xl text-gray-700">
-									Rs. {product?.price}
+									Rs. {product.price}
 								</h2>
-								{product?.is_in_stock ? (
+								{product.is_in_stock ? (
 									<p className="text-primaryColor text-xl sm:text-2xl font-semibold">
 										In Stock
 									</p>
@@ -154,7 +154,7 @@ export default function ProductPage({
 							</div>
 
 							<p className="text-base mb-6 text-neutral-800">
-								{product?.description}
+								{product.description}
 							</p>
 
 							<div className="rounded-md border border-neutral-200 bg-white">
@@ -217,12 +217,13 @@ export default function ProductPage({
 									<div className="h-full xs:w-full rounded-md inline-flex items-center justify-between bg-neutral-800">
 										<button
 											type="button"
-											className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125"
+											className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125 disabled:cursor-not-allowed"
 											onClick={() => {
 												if (itemCount > 1) {
 													setItemCount((prevItemCount) => prevItemCount - 1);
 												}
 											}}
+											disabled={!product.is_in_stock}
 										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
@@ -244,15 +245,13 @@ export default function ProductPage({
 										</span>
 										<button
 											type="button"
-											className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125"
+											className="text-white transition duration-200 px-2 sm:px-4 hover:scale-125 disabled:cursor-not-allowed"
 											onClick={() => {
-												if (
-													product?.stock_quantity &&
-													itemCount < product.stock_quantity
-												) {
+												if (itemCount < product.stock_quantity) {
 													setItemCount((prevItemCount) => prevItemCount + 1);
 												}
 											}}
+											disabled={!product.is_in_stock}
 										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +273,8 @@ export default function ProductPage({
 
 								<button
 									onClick={handleAddToCart}
-									className="max-sm:min-w-[50%] max-sm:max-w-[50%] max-2xl:min-w-[55%] max-2xl:max-w-[55%] w-full xl:ml-10 block px-5 text-base sm:text-lg font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
+									className="max-sm:min-w-[50%] max-sm:max-w-[50%] max-2xl:min-w-[55%] max-2xl:max-w-[55%] w-full xl:ml-10 block px-5 text-base sm:text-lg font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700 disabled:cursor-not-allowed"
+									disabled={!product.is_in_stock}
 								>
 									Add to Cart
 								</button>
@@ -282,7 +282,8 @@ export default function ProductPage({
 
 							<button
 								onClick={buyNow}
-								className="w-full block px-5 py-[7px] sm:py-[11px] text-base sm:text-lg font-medium tracking-wider text-center text-neutral-800 transition-colors duration-300 transform bg-white border border-neutral-800 rounded-md hover:text-white hover:bg-neutral-800"
+								className="w-full block px-5 py-[7px] sm:py-[11px] text-base sm:text-lg font-medium tracking-wider text-center text-neutral-800 transition-colors duration-300 transform bg-white border border-neutral-800 rounded-md hover:text-white hover:bg-neutral-800 disabled:cursor-not-allowed"
+								disabled={!product.is_in_stock}
 							>
 								Buy Now
 							</button>

@@ -41,6 +41,6 @@ export type CartItem = {
 	name: string;
 	price: number;
 	purchaseQuantity: number;
-	maxQuantity: number;
+	stockQuantity: number;
 	image: string;
 };
