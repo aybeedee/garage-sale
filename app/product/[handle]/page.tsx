@@ -120,7 +120,6 @@ export default function ProductPage({
 									)
 							)}
 						</div>
-
 						<div className="flex justify-center lg:justify-start rounded-xl lg:ml-8 grow shrink basis-auto relative box-border h-full">
 							<img
 								src={product.images[mainImageIndex]}
@@ -128,7 +127,6 @@ export default function ProductPage({
 							/>
 						</div>
 					</div>
-
 					<div className="flex flex-col ml-0 lg:max-w-[750px] gap-12 lg:ml-8">
 						<div className="flex flex-col">
 							<p className="mb-1 font-extrabold text-base sm:text-lg bg-gradient-to-r from-primaryColor to-secondaryColor inline-block text-transparent bg-clip-text capitalize">
@@ -137,7 +135,6 @@ export default function ProductPage({
 							<h1 className="font-semibold text-4xl sm:text-5xl mb-4">
 								{product.name}
 							</h1>
-
 							<div className="flex justify-between mb-3">
 								<h2 className="font-semibold text-2xl sm:text-3xl text-gray-700">
 									Rs. {product.price}
@@ -152,11 +149,9 @@ export default function ProductPage({
 									</p>
 								)}
 							</div>
-
 							<p className="text-base mb-6 text-neutral-800">
 								{product.description}
 							</p>
-
 							<div className="rounded-md border border-neutral-200 bg-white">
 								<h2 className="mb-0">
 									<button
@@ -210,7 +205,6 @@ export default function ProductPage({
 								)}
 							</div>
 						</div>
-
 						<div className="flex flex-col">
 							<div className="flex justify-between mb-4">
 								<div className="max-sm:min-w-[20%] max-sm:max-w-[20%] max-2xl:min-w-[25%] max-2xl:max-w-[25%]">
@@ -270,7 +264,6 @@ export default function ProductPage({
 										</button>
 									</div>
 								</div>
-
 								<button
 									onClick={handleAddToCart}
 									className="max-sm:min-w-[50%] max-sm:max-w-[50%] max-2xl:min-w-[55%] max-2xl:max-w-[55%] w-full xl:ml-10 block px-5 text-base sm:text-lg font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700 disabled:cursor-not-allowed"
@@ -279,7 +272,6 @@ export default function ProductPage({
 									Add to Cart
 								</button>
 							</div>
-
 							<button
 								onClick={buyNow}
 								className="w-full block px-5 py-[7px] sm:py-[11px] text-base sm:text-lg font-medium tracking-wider text-center text-neutral-800 transition-colors duration-300 transform bg-white border border-neutral-800 rounded-md hover:text-white hover:bg-neutral-800 disabled:cursor-not-allowed"
