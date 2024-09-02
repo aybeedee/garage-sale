@@ -25,7 +25,7 @@ export default async function HomePage({
 			.from("product")
 			.select("*")
 			.eq("is_released", true);
-		if (error) {
+		if (queryError) {
 			error = queryError;
 		} else {
 			products = data;

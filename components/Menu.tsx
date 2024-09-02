@@ -34,7 +34,7 @@ export default function Menu() {
 
 	useEffect(() => {
 		fetchCategories();
-	}, [supabase]);
+	}, []);
 
 	return (
 		<>
