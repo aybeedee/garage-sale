@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useCart } from "@/context/CartContext";
 import { Tables } from "@/utils/database.types";
+import Loader from "@/components/Loader";
 
 export default function ProductPage({
 	params,
@@ -17,6 +18,7 @@ export default function ProductPage({
 	const [mainImageIndex, setMainImageIndex] = useState<number>(0);
 	const [user, setUser] = useState<User | null>(null);
 	const [product, setProduct] = useState<Tables<"product"> | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<any>(null);
 
 	const { addToCart, toggleCartOpen } = useCart();
@@ -78,6 +80,8 @@ export default function ProductPage({
 			}
 		} catch (error) {
 			setError(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -93,8 +97,12 @@ export default function ProductPage({
 
 	return (
 		<div className="w-full items-center px-2 py-12 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur 2xl:px-10">
-			{error !== null ? (
-				<div className="flex flex-col justify-center items-center gap-2 px-6 h-44">
+			{isLoading ? (
+				<div className="flex flex-row w-full h-[50vh] items-center justify-center">
+					<Loader size={75} />
+				</div>
+			) : error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
 					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
 						Oops
 					</h1>
@@ -283,7 +291,7 @@ export default function ProductPage({
 					</div>
 				</div>
 			) : (
-				<div className="flex flex-col justify-center items-center gap-2 px-6 h-44">
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
 					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
 						Product not Found
 					</h1>
