@@ -2,84 +2,83 @@
 
 import { useEffect, useRef, useState } from "react";
 import { notFound, usePathname } from "next/navigation";
-import { Product, SortType } from "@/utils/app.types";
+import { SortType } from "@/utils/app.types";
 import ProductCard from "@/components/ProductCard";
-import { sortingList, sampleProductsList } from "@/utils/constants";
+import { sortingList } from "@/utils/constants";
+import { Tables } from "@/utils/database.types";
+import { createClient } from "@/utils/supabase/client";
 
 export default function ProductsPage({
 	searchParams,
 }: {
 	searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-	const { sort, q } = searchParams as { [key: string]: string };
-	const pathname = usePathname();
-
-	if (
-		sort &&
-		sortingList.find((sortType) => sortType.slug === sort) === undefined
-	) {
-		return notFound();
-	}
-
+	const [products, setProducts] = useState<Tables<"product">[] | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [error, setError] = useState<any>(null);
 	const [openSortSelect, setpenSortSelect] = useState(false);
-	let productsList: Product[] = [];
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	// sorting
+	const pathname = usePathname();
+
+	let selectedSortType: SortType | undefined = undefined;
+	const { sort, q } = searchParams as { [key: string]: string };
+	const supabase = createClient();
+
 	if (sort) {
-		const selectedSortType = sortingList.find(
-			(sortType) => sortType.slug === sort
-		)?.slug;
-
-		if (selectedSortType === "recent-desc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.timestamp < product2.timestamp
-					? 1
-					: product1.timestamp > product2.timestamp
-						? -1
-						: 0
-			);
-		} else if (selectedSortType === "price-asc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.price > product2.price
-					? 1
-					: product1.price < product2.price
-						? -1
-						: 0
-			);
-		} else if (selectedSortType === "price-desc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.price < product2.price
-					? 1
-					: product1.price > product2.price
-						? -1
-						: 0
-			);
+		selectedSortType = sortingList.find((sortType) => sortType.slug === sort);
+		if (selectedSortType === undefined) {
+			return notFound();
 		}
-	} else {
-		productsList = sampleProductsList;
 	}
 
-	// searching
-	if (q) {
-		productsList = [...productsList].filter((product) =>
-			product.name.toLowerCase().includes(q.toLowerCase())
-		);
-	}
+	const handleClickOutside = (event: MouseEvent) => {
+		if (
+			dropdownRef.current &&
+			!dropdownRef.current.contains(event.target as Node)
+		) {
+			setpenSortSelect(false);
+		}
+	};
+
+	const fetchProducts = async () => {
+		const query = supabase.from("product").select("*").eq("is_released", true);
+		// sorting
+		if (selectedSortType) {
+			if (selectedSortType.slug === "recent-desc") {
+				query.order("created_at", { ascending: false });
+			} else if (selectedSortType.slug === "price-asc") {
+				query.order("price", { ascending: true });
+			} else if (selectedSortType.slug === "price-desc") {
+				query.order("price", { ascending: false });
+			}
+		}
+		// searching
+		if (q) {
+			query.textSearch("search_name_description", `${q}`);
+		}
+		try {
+			const { data, error } = await query;
+			if (error) {
+				setError(error);
+				return;
+			}
+			setProducts(data);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target as Node)
-			) {
-				setpenSortSelect(false);
-			}
-		};
-
 		window.addEventListener("click", handleClickOutside);
 		return () => window.removeEventListener("click", handleClickOutside);
 	}, []);
+
+	useEffect(() => {
+		fetchProducts();
+	}, [selectedSortType, q]);
 
 	return (
 		<div className="flex flex-col w-full px-7 py-10 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
@@ -88,15 +87,11 @@ export default function ProductsPage({
 					All Products
 				</h2>
 				<p className="text-gray-500 lg:fixed lg:inset-x-0 lg:w-full lg:h-min lg:flex lg:items-center lg:justify-center">
-					Showing {productsList.length} results {q && `for "${q}"`}
-					{sort ? (
-						<>
-							{" "}
-							| {sortingList.find((sortType) => sortType.slug === sort)?.type}
-						</>
-					) : (
-						<></>
-					)}
+					{isLoading
+						? "Loading results"
+						: `Showing ${products?.length} result${products?.length !== 1 ? "s" : ""}`}{" "}
+					{q && `for "${q}"`}{" "}
+					{selectedSortType && ` | ${selectedSortType.type}`}
 				</p>
 				<div ref={dropdownRef} className="relative w-full lg:w-auto">
 					<button
@@ -154,7 +149,7 @@ export default function ProductsPage({
 
 			<div className="mx-auto min-h-screen mt-6">
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
-					{productsList.map((product: Product, index: number) => (
+					{products?.map((product, index: number) => (
 						<ProductCard key={index} product={product} />
 					))}
 				</div>

@@ -70,6 +70,7 @@ export default function ProductPage({
 			const { data, error } = await supabase
 				.from("product")
 				.select("*")
+				.eq("is_released", true)
 				.eq("handle", params.handle);
 			if (error) {
 				setError(error);
