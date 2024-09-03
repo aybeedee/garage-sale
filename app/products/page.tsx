@@ -7,6 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import { sortingList } from "@/utils/constants";
 import { Tables } from "@/utils/database.types";
 import { createClient } from "@/utils/supabase/client";
+import Loader from "@/components/Loader";
 
 export default function ProductsPage({
 	searchParams,
@@ -118,7 +119,6 @@ export default function ProductsPage({
 							/>
 						</svg>
 					</button>
-
 					{openSortSelect && (
 						<div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-lg w-full text-center animate-out">
 							<ul
@@ -146,14 +146,35 @@ export default function ProductsPage({
 					)}
 				</div>
 			</div>
-
-			<div className="mx-auto min-h-screen mt-6">
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
-					{products?.map((product, index: number) => (
-						<ProductCard key={index} product={product} />
-					))}
+			{isLoading ? (
+				<div className="flex flex-row w-full h-[50vh] items-center justify-center">
+					<Loader size={75} />
 				</div>
-			</div>
+			) : error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						Oops
+					</h1>
+					<p className="text-lg text-center">
+						An unexpected error occured :/ Try reloading the page.
+					</p>
+				</div>
+			) : products?.length ? (
+				<div className="mx-auto min-h-screen mt-6">
+					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+						{products?.map((product, index: number) => (
+							<ProductCard key={index} product={product} />
+						))}
+					</div>
+				</div>
+			) : (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						No Results
+					</h1>
+					<p className="text-lg text-center">Could not find any products :I</p>
+				</div>
+			)}
 		</div>
 	);
 }
