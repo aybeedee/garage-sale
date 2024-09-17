@@ -20,7 +20,8 @@ export default async function Address() {
 				SHIPPING DETAILS
 			</h1>
 			<p className="text-lg">
-				Webpage is currently under construction. Thank you for your patience!
+				This webpage is currently under construction. Thank you for your
+				patience!
 			</p>
 		</div>
 	);

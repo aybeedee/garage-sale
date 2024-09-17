@@ -20,7 +20,8 @@ export default async function Settings() {
 				SETTINGS
 			</h1>
 			<p className="text-lg">
-				Webpage is currently under construction. Thank you for your patience!
+				This webpage is currently under construction. Thank you for your
+				patience!
 			</p>
 		</div>
 	);
