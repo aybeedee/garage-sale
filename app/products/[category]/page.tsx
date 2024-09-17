@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { notFound, usePathname } from "next/navigation";
-import { Product, SortType } from "@/utils/app.types";
+import { SortType } from "@/utils/app.types";
 import ProductCard from "@/components/ProductCard";
-import { sortingList, categories, sampleProductsList } from "@/utils/constants";
+import { sortingList } from "@/utils/constants";
+import { Tables } from "@/utils/database.types";
+import { createClient } from "@/utils/supabase/client";
+import Loader from "@/components/Loader";
 
 export default function CategoryPage({
 	params,
@@ -13,94 +16,107 @@ export default function CategoryPage({
 	params: { category: string };
 	searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-	const { sort, q } = searchParams as { [key: string]: string };
-	const pathname = usePathname();
-
-	if (
-		categories.find((category) => category.path === params.category) ===
-			undefined ||
-		(sort &&
-			sortingList.find((sortType) => sortType.slug === sort) === undefined)
-	) {
-		return notFound();
-	}
-
+	// Tables<"product">[] isn't actually the accurate type for this i guess since the query for it joins, filters etc
+	// but no real way to set the type beforehand as the query type can only be determined just before firing the request
+	// ^see https://supabase.com/docs/reference/javascript/typescript-support#response-types-for-complex-queries
+	const [products, setProducts] = useState<Tables<"product">[] | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [error, setError] = useState<any>(null);
 	const [openSortSelect, setpenSortSelect] = useState(false);
-	let productsList: Product[] = [];
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	// sorting
+	const pathname = usePathname();
+
+	let selectedSortType: SortType | undefined = undefined;
+	const { sort, q } = searchParams as { [key: string]: string };
+	const supabase = createClient();
+
 	if (sort) {
-		const selectedSortType = sortingList.find(
-			(sortType) => sortType.slug === sort
-		)?.slug;
-
-		if (selectedSortType === "recent-desc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.timestamp < product2.timestamp
-					? 1
-					: product1.timestamp > product2.timestamp
-						? -1
-						: 0
-			);
-		} else if (selectedSortType === "price-asc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.price > product2.price
-					? 1
-					: product1.price < product2.price
-						? -1
-						: 0
-			);
-		} else if (selectedSortType === "price-desc") {
-			productsList = [...sampleProductsList].sort((product1, product2) =>
-				product1.price < product2.price
-					? 1
-					: product1.price > product2.price
-						? -1
-						: 0
-			);
+		selectedSortType = sortingList.find((sortType) => sortType.slug === sort);
+		if (selectedSortType === undefined) {
+			return notFound();
 		}
-	} else {
-		productsList = sampleProductsList;
 	}
 
-	// searching
-	if (q) {
-		productsList = [...productsList].filter((product) =>
-			product.name.toLowerCase().includes(q.toLowerCase())
-		);
-	}
+	const handleClickOutside = (event: MouseEvent) => {
+		if (
+			dropdownRef.current &&
+			!dropdownRef.current.contains(event.target as Node)
+		) {
+			setpenSortSelect(false);
+		}
+	};
+
+	const fetchProducts = async () => {
+		const query = supabase
+			.from("product")
+			.select(`*, category!inner( id, name, path )`)
+			.eq("is_released", true)
+			.eq("category.path", params.category);
+		// sorting
+		if (selectedSortType) {
+			if (selectedSortType.slug === "recent-desc") {
+				query.order("created_at", { ascending: false });
+			} else if (selectedSortType.slug === "price-asc") {
+				query.order("price", { ascending: true });
+			} else if (selectedSortType.slug === "price-desc") {
+				query.order("price", { ascending: false });
+			}
+		}
+		// searching
+		if (q) {
+			query.textSearch("search_name_description", `${q}`);
+		}
+		try {
+			// TODO: this validates the category since it seems pretty vulnerable; need to figure out a more efficient way to do this; maybe storing categories already fetched for Menu in state/local/context
+			const { data: categoryData, error: categoryError } = await supabase
+				.from("category")
+				.select("*")
+				.eq("path", params.category);
+			if (!categoryData?.length || categoryError) {
+				setError(new Error("Invalid category"));
+				return;
+			}
+			const { data, error } = await query;
+			if (error) {
+				setError(error);
+				return;
+			}
+			setProducts(data);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target as Node)
-			) {
-				setpenSortSelect(false);
-			}
-		};
-
 		window.addEventListener("click", handleClickOutside);
 		return () => window.removeEventListener("click", handleClickOutside);
 	}, []);
+
+	useEffect(() => {
+		if (!params?.category) {
+			setError(new Error("No category provided"));
+			setIsLoading(false);
+			return;
+		}
+		fetchProducts();
+	}, [selectedSortType, q]);
 
 	return (
 		<div className="flex flex-col w-full px-7 py-10 bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
 			<div className="flex flex-col gap-5 w-full justify-between items-center lg:flex-row lg:gap-0">
 				<h2 className="text-4xl font-extrabold bg-gradient-to-r from-primaryColor to-secondaryColor inline-block text-transparent bg-clip-text capitalize">
-					{params.category}
+					{/* checks are here in order to only show category name if it's valid */}
+					{!isLoading && !error && params?.category}
 				</h2>
 				<p className="text-gray-500 lg:fixed lg:inset-x-0 lg:w-full lg:h-min lg:flex lg:items-center lg:justify-center">
-					Showing {productsList.length} results {q && `for "${q}"`}
-					{sort ? (
-						<>
-							{" "}
-							| {sortingList.find((sortType) => sortType.slug === sort)?.type}
-						</>
-					) : (
-						<></>
-					)}
+					{isLoading
+						? "Loading results"
+						: `Showing ${products?.length} result${products?.length !== 1 ? "s" : ""}`}{" "}
+					{q && `for "${q}"`}{" "}
+					{selectedSortType && ` | ${selectedSortType.type}`}
 				</p>
 				<div ref={dropdownRef} className="relative w-full lg:w-auto">
 					<button
@@ -127,7 +143,6 @@ export default function CategoryPage({
 							/>
 						</svg>
 					</button>
-
 					{openSortSelect && (
 						<div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-lg w-full text-center animate-out">
 							<ul
@@ -155,14 +170,35 @@ export default function CategoryPage({
 					)}
 				</div>
 			</div>
-
-			<div className="mx-auto min-h-screen mt-6">
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
-					{productsList.map((product: Product, index: number) => (
-						<ProductCard key={index} product={product} />
-					))}
+			{isLoading ? (
+				<div className="flex flex-row w-full h-[50vh] items-center justify-center">
+					<Loader size={75} />
 				</div>
-			</div>
+			) : error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						Oops
+					</h1>
+					<p className="text-lg text-center">
+						An unexpected error occured :/ Try reloading the page.
+					</p>
+				</div>
+			) : products?.length ? (
+				<div className="mx-auto min-h-screen mt-6">
+					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+						{products?.map((product, index: number) => (
+							<ProductCard key={index} product={product} />
+						))}
+					</div>
+				</div>
+			) : (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						No Results
+					</h1>
+					<p className="text-lg text-center">Could not find any products :I</p>
+				</div>
+			)}
 		</div>
 	);
 }
