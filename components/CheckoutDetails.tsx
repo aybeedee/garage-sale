@@ -2,27 +2,31 @@
 
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import "react-phone-input-2/lib/style.css";
+import PhoneInput from "react-phone-input-2";
 
 export default function CheckoutDetails() {
+	const [phoneNumber, setPhoneNumber] = useState<string>("");
+
 	const router = useRouter();
 	const { cart, toggleCartOpen } = useCart();
 
 	if (cart === null || !Object.keys(cart).length) {
 		router.push("/products");
 		toggleCartOpen(true);
-		return;
 	}
 
 	return (
 		<div className="flex flex-row justify-center w-full gap-10">
-			<div className="flex flex-col gap-8 justify-center w-1/3 rounded-xl border border-gray-200 shadow-lg bg-white">
-				<h1 className="rounded-t-xl w-full text-white text-left text-3xl font-medium bg-neutral-800 py-4 px-6">
+			<div className="flex flex-col gap-8 justify-center w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
+				<h1 className="rounded-t-xl w-full text-white text-center text-3xl font-medium bg-neutral-800 py-4 px-6">
 					Shipping
 				</h1>
-				<div className="flex flex-col gap-4 px-10 pb-8">
+				<div className="flex flex-col gap-4 px-8 pb-8">
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="firstName"
 						>
 							First Name<span className="text-primaryColor">*</span>
@@ -37,7 +41,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="lastName"
 						>
 							Last Name<span className="text-primaryColor">*</span>
@@ -52,7 +56,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="email"
 						>
 							Email<span className="text-primaryColor">*</span>
@@ -67,7 +71,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="postalCode"
 						>
 							Postal Code<span className="text-primaryColor">*</span>
@@ -83,7 +87,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="addressLine1"
 						>
 							Address Line 1<span className="text-primaryColor">*</span>
@@ -98,7 +102,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="addressLine2"
 						>
 							Address Line 2
@@ -113,7 +117,7 @@ export default function CheckoutDetails() {
 					</div>
 					<div className="flex flex-row items-center">
 						<label
-							className="w-44 text-base font-medium mb-2 whitespace-nowrap"
+							className="w-44 text-base mb-2 whitespace-nowrap"
 							htmlFor="country"
 						>
 							Country<span className="text-primaryColor">*</span>
@@ -130,9 +134,33 @@ export default function CheckoutDetails() {
 							</select>
 						</div>
 					</div>
+					<div className="flex flex-row items-center">
+						<label
+							className="w-44 text-base mb-2 whitespace-nowrap"
+							htmlFor="phoneNumber"
+						>
+							Phone Number<span className="text-primaryColor">*</span>
+						</label>
+						<PhoneInput
+							country={"pk"}
+							value={phoneNumber}
+							onChange={(number) => setPhoneNumber(number)}
+							inputStyle={{
+								width: "100%",
+								color: "#374151",
+								backgroundColor: "#FFFFFF",
+								border: "1px solid #E2E8F0",
+								borderRadius: "0.375rem",
+								outline: "none",
+								fontSize: "1rem",
+								lineHeight: "1.5rem",
+								fontWeight: 400,
+							}}
+						/>
+					</div>
 				</div>
 			</div>
-			<div className="px-6 py-4 flex flex-row justify-center w-1/3 rounded-xl border border-gray-200 shadow-lg bg-white">
+			<div className="px-6 py-4 flex flex-row justify-center w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
 				<h1 className="w-full text-left text-3xl font-medium">Summary</h1>
 			</div>
 		</div>
