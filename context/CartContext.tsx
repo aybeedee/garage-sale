@@ -1,13 +1,12 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { CartContextType, CartItem } from "@/utils/app.types";
+import { Cart, CartContextType, CartItem } from "@/utils/app.types";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-	// { product_id: count, ... }
-	const [cart, setCart] = useState<{ [productId: string]: CartItem }>(() => {
+	const [cart, setCart] = useState<Cart>(() => {
 		let currentValue;
 		try {
 			currentValue = JSON.parse(localStorage.getItem("cart") || String({}));
@@ -70,13 +69,25 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
+	const clearCart = () => {
+		setCart({});
+	};
+
 	useEffect(() => {
 		localStorage.setItem("cart", JSON.stringify(cart));
 	}, [cart]);
 
 	return (
 		<CartContext.Provider
-			value={{ isCartOpen, toggleCartOpen, cart, updateCart, addToCart }}
+			value={{
+				cart,
+				setCart,
+				isCartOpen,
+				toggleCartOpen,
+				addToCart,
+				updateCart,
+				clearCart,
+			}}
 		>
 			{children}
 		</CartContext.Provider>

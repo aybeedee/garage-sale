@@ -15,7 +15,7 @@ export default async function HomePage({
 	let error: any = null;
 	let products: Tables<"product">[] | null = null;
 
-	// TODO: these need try/catches too no? will have to refactor everywhere if so
+	// TODO: these need try/catches too no? will have to refactor everywhere if so; can also lump it with other data fetching operations like in CheckoutDetails.tsx; also, supabase.auth.getUser() also returns error !
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();

@@ -25,14 +25,16 @@ export type SortType = {
 };
 
 export type CartContextType = {
+	cart: Cart;
+	setCart: React.Dispatch<React.SetStateAction<Cart>>;
 	isCartOpen: boolean;
 	toggleCartOpen: (open: boolean) => void;
-	cart: { [productId: string]: CartItem };
+	addToCart: (cartItem: CartItem) => void;
 	updateCart: (
 		productId: string,
 		action: "increment" | "decrement" | "remove"
 	) => void;
-	addToCart: (cartItem: CartItem) => void;
+	clearCart: () => void;
 };
 
 export type CartItem = {
@@ -44,3 +46,14 @@ export type CartItem = {
 	stockQuantity: number;
 	image: string;
 };
+
+export type Cart = { [productId: string]: CartItem };
+
+export interface ServerActionResponse {
+	ok: boolean;
+	result: Cart | null;
+	error: {
+		type: "DATABASE_ERROR" | "SERVER_ERROR" | "CLIENT_ERROR";
+		response: any;
+	} | null;
+}
