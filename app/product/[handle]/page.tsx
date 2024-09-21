@@ -49,8 +49,19 @@ export default function ProductPage({
 		if (!user) {
 			router.push("/login");
 		} else {
-			console.log("buy now");
-			// TODO: buy now functionality
+			// TODO: maybe set error if no product ? same in other places and other pages too
+			if (product) {
+				addToCart({
+					id: product.id,
+					handle: product.handle,
+					name: product.name,
+					price: product.price,
+					purchaseQuantity: itemCount,
+					stockQuantity: product.stock_quantity,
+					image: product.images[0],
+				});
+			}
+			router.push("/checkout");
 		}
 	};
 
