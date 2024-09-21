@@ -216,3 +216,5 @@ export const sampleProductsList: Product[] = [
 		timestamp: 1702600311010,
 	},
 ];
+
+export const deliveryCharges = 200;

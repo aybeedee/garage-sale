@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import validateCart from "@/actions/validateCart";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
+import { deliveryCharges } from "@/utils/constants";
 import Loader from "@/components/Loader";
+import CheckoutItemCard from "@/components/CheckoutItemCard";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
 
@@ -82,16 +84,13 @@ export default function CheckoutDetails() {
 				</div>
 			) : (
 				<>
-					<div className="flex flex-col gap-8 justify-center w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
-						<h1 className="rounded-t-xl w-full text-white text-center text-3xl font-medium bg-neutral-800 py-4 px-6">
+					<div className="flex flex-col gap-8 w-2/5 h-min rounded-xl border border-gray-200 shadow-lg bg-white">
+						<h1 className="rounded-t-xl w-full text-white text-center text-3xl font-medium bg-neutral-800 py-4">
 							Shipping
 						</h1>
 						<div className="flex flex-col gap-4 px-8 pb-8">
 							<div className="flex flex-row items-center">
-								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
-									htmlFor="firstName"
-								>
+								<label className="w-44 whitespace-nowrap" htmlFor="firstName">
 									First Name<span className="text-primaryColor">*</span>
 								</label>
 								<input
@@ -103,10 +102,7 @@ export default function CheckoutDetails() {
 								/>
 							</div>
 							<div className="flex flex-row items-center">
-								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
-									htmlFor="lastName"
-								>
+								<label className="w-44 whitespace-nowrap" htmlFor="lastName">
 									Last Name<span className="text-primaryColor">*</span>
 								</label>
 								<input
@@ -118,10 +114,7 @@ export default function CheckoutDetails() {
 								/>
 							</div>
 							<div className="flex flex-row items-center">
-								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
-									htmlFor="email"
-								>
+								<label className="w-44 whitespace-nowrap" htmlFor="email">
 									Email<span className="text-primaryColor">*</span>
 								</label>
 								<input
@@ -133,10 +126,7 @@ export default function CheckoutDetails() {
 								/>
 							</div>
 							<div className="flex flex-row items-center">
-								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
-									htmlFor="postalCode"
-								>
+								<label className="w-44 whitespace-nowrap" htmlFor="postalCode">
 									Postal Code<span className="text-primaryColor">*</span>
 								</label>
 								<input
@@ -150,7 +140,7 @@ export default function CheckoutDetails() {
 							</div>
 							<div className="flex flex-row items-center">
 								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
+									className="w-44 whitespace-nowrap"
 									htmlFor="addressLine1"
 								>
 									Address Line 1<span className="text-primaryColor">*</span>
@@ -165,7 +155,7 @@ export default function CheckoutDetails() {
 							</div>
 							<div className="flex flex-row items-center">
 								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
+									className="w-44 whitespace-nowrap"
 									htmlFor="addressLine2"
 								>
 									Address Line 2
@@ -179,10 +169,7 @@ export default function CheckoutDetails() {
 								/>
 							</div>
 							<div className="flex flex-row items-center">
-								<label
-									className="w-44 text-base mb-2 whitespace-nowrap"
-									htmlFor="country"
-								>
+								<label className="w-44 whitespace-nowrap" htmlFor="country">
 									Country<span className="text-primaryColor">*</span>
 								</label>
 								<div className="w-full text-gray-700 bg-white border rounded-md border-gray-200">
@@ -223,8 +210,67 @@ export default function CheckoutDetails() {
 							</div>
 						</div>
 					</div>
-					<div className="px-6 py-4 flex flex-row justify-center w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
-						<h1 className="w-full text-left text-3xl font-medium">Summary</h1>
+					<div className="flex flex-col gap-8 w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
+						<h1 className="rounded-t-xl w-full text-center text-3xl font-medium py-4">
+							Summary
+						</h1>
+						<div className="flex flex-col justify-between h-full pb-8 px-8 gap-4">
+							<div className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto px-10">
+								{Object.entries(cart).map(([productId, cartItem]) => (
+									<CheckoutItemCard cartItem={cartItem} key={productId} />
+								))}
+							</div>
+							<div className="flex flex-col gap-2">
+								<div className="flex flex-row items-center justify-between">
+									<p>Delivery Charges</p>
+									<p className="font-bold">Rs. {deliveryCharges}</p>
+								</div>
+								<div className="flex flex-row items-center justify-between">
+									<p>Grand Total</p>
+									<p className="font-bold">
+										Rs.{" "}
+										{Object.values(cart).reduce(
+											(sum, product) =>
+												sum + product.price * product.purchaseQuantity,
+											0
+										) + deliveryCharges}
+									</p>
+								</div>
+								<div className="flex flex-row items-center gap-4">
+									<label
+										className="w-44 whitespace-nowrap"
+										htmlFor="paymentMethod"
+									>
+										Payment Method<span className="text-primaryColor">*</span>
+									</label>
+									<div className="w-full text-gray-700 bg-white border rounded-md border-gray-200">
+										<select
+											className="w-full px-4 py-2 rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
+											name="paymentMethod"
+											defaultValue="cashOnDelivery"
+											disabled
+											required
+										>
+											<option value="cashOnDelivery">Cash on Delivery</option>
+										</select>
+									</div>
+								</div>
+								<p>
+									Note: We ensure swift processing and dispatch within{" "}
+									<strong>1-2 business days</strong> reaching you within{" "}
+									<strong>5-7 days</strong>.
+								</p>
+							</div>
+							<button
+								onClick={() => {
+									router.push("/checkout");
+									toggleCartOpen(false);
+								}}
+								className="block py-3 font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
+							>
+								Complete Order
+							</button>
+						</div>
 					</div>
 				</>
 			)}
