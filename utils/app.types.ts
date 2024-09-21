@@ -49,9 +49,19 @@ export type CartItem = {
 
 export type Cart = { [productId: string]: CartItem };
 
-export interface ServerActionResponse {
+export type ShippingDetails = {
+	first_name: string;
+	last_name: string;
+	phone_number: string;
+	address_line_1: string;
+	address_line_2: string;
+	country: string;
+	postal_code: string;
+};
+
+export interface ServerActionResponse<T> {
 	ok: boolean;
-	result: Cart | null;
+	result: T | null;
 	error: {
 		type: "DATABASE_ERROR" | "SERVER_ERROR" | "CLIENT_ERROR";
 		response: any;

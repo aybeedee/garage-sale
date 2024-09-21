@@ -4,9 +4,10 @@ import { Cart, ServerActionResponse } from "@/utils/app.types";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
+// TODO: improve/update error handling based on how completeOrder is implemented - and make similar changes elsewhere too if needed
 export default async function validateCart(
 	cart: Cart
-): Promise<ServerActionResponse> {
+): Promise<ServerActionResponse<Cart>> {
 	try {
 		const productIds = Object.keys(cart);
 
