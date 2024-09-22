@@ -2,7 +2,7 @@
 
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import validateCart from "@/actions/validateCart";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
@@ -10,12 +10,26 @@ import { deliveryCharges } from "@/utils/constants";
 import Loader from "@/components/Loader";
 import CheckoutItemCard from "@/components/CheckoutItemCard";
 import "react-phone-input-2/lib/style.css";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput, { CountryData } from "react-phone-input-2";
+import parsePhoneNumber, { CountryCode } from "libphonenumber-js";
+import completeOrder from "@/actions/completeOrder";
+import { Tables } from "@/utils/database.types";
+import TickIcon from "./TickIcon";
+import Link from "next/link";
 
 export default function CheckoutDetails() {
+	const firstNameRef = useRef<HTMLInputElement>(null);
+	const lastNameRef = useRef<HTMLInputElement>(null);
+	const postalCodeRef = useRef<HTMLInputElement>(null);
+	const addressLine1Ref = useRef<HTMLInputElement>(null);
+	const addressLine2Ref = useRef<HTMLInputElement>(null);
+	const countryRef = useRef<HTMLSelectElement>(null);
 	const [phoneNumber, setPhoneNumber] = useState<string>("");
+	const [phoneValid, setPhoneValid] = useState<boolean>(true);
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isOrderComplete, setIsOrderComplete] = useState<boolean>(false);
+	const [order, setOrder] = useState<Tables<"order"> | null>(null);
 	const [error, setError] = useState<any>(null);
 
 	const router = useRouter();
@@ -23,13 +37,23 @@ export default function CheckoutDetails() {
 
 	const supabase = createClient();
 
+	const isPhoneValid = (phone: string, country: CountryData) => {
+		const { countryCode: countryCodePhoneInput, dialCode } = country;
+		if (!countryCodePhoneInput || !dialCode) return true;
+
+		const countryCode = countryCodePhoneInput.toUpperCase() as CountryCode;
+		const phoneWithoutDialCode = phone.replace(dialCode, "");
+		const phoneNumber = parsePhoneNumber(phoneWithoutDialCode, countryCode);
+		return phoneNumber?.isValid();
+	};
+
 	const fetchUser = async () => {
 		const {
 			data: { user },
 			error,
 		} = await supabase.auth.getUser();
-		if (error) {
-			throw error;
+		if (error || !user) {
+			router.push("/login");
 		}
 		setUser(user);
 	};
@@ -48,7 +72,60 @@ export default function CheckoutDetails() {
 
 	const getData = async () => {
 		try {
-			await Promise.all([fetchUser(), loadCart()]);
+			// not firing these requests together since want to redirect away before loadCart if user not fetched
+			await fetchUser();
+			await loadCart();
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleCompleteOrder = async (
+		event: React.FormEvent<HTMLFormElement>
+	) => {
+		event.preventDefault();
+
+		if (!phoneNumber.length) {
+			setPhoneValid(false);
+			return;
+		}
+		if (
+			!firstNameRef.current?.value ||
+			!lastNameRef.current?.value ||
+			!postalCodeRef.current?.value ||
+			!addressLine1Ref.current?.value ||
+			!addressLine2Ref.current?.value ||
+			!countryRef.current?.value
+		) {
+			return;
+		}
+
+		setIsLoading(true);
+		try {
+			const { ok, result, error } = await completeOrder(cart, {
+				firstName: firstNameRef.current.value,
+				lastName: firstNameRef.current.value,
+				phoneNumber: phoneNumber,
+				addressLine1: addressLine1Ref.current.value,
+				addressLine2: addressLine2Ref.current.value,
+				country: countryRef.current.value,
+				postalCode: postalCodeRef.current.value,
+			});
+			if (!ok) {
+				// error is always != null when ok is false
+				if (error!.type !== "SERVER_ERROR") {
+					clearCart();
+				}
+				throw new Error(error!.response);
+			}
+
+			if (result) {
+				// this in turn will trigger isOrderComplete's useEffect below to clearCart; did this instead of inline after it to avoid risking batched state updates not doing it synchronously
+				setIsOrderComplete(true);
+				setOrder(result);
+			}
 		} catch (error) {
 			setError(error);
 		} finally {
@@ -57,7 +134,11 @@ export default function CheckoutDetails() {
 	};
 
 	useEffect(() => {
-		if (!cart || !Object.keys(cart).length) {
+		if (isOrderComplete) clearCart();
+	}, [isOrderComplete]);
+
+	useEffect(() => {
+		if ((!cart || !Object.keys(cart).length) && !isOrderComplete) {
 			router.push("/products");
 			toggleCartOpen(true);
 		}
@@ -82,13 +163,48 @@ export default function CheckoutDetails() {
 						An unexpected error occured :/ Try reloading the page.
 					</p>
 				</div>
+			) : isOrderComplete ? (
+				<div className="flex flex-col items-center justify-center w-1/3 pt-3 pb-7 rounded-xl border border-gray-200 shadow-lg bg-white">
+					<TickIcon />
+					<div className="flex flex-col items-center justify-center gap-4 mb-6">
+						<h1 className="text-3xl font-bold">Order Completed</h1>
+						<p className="px-10 text-sm font-light text-center">
+							Your order totalling{" "}
+							<span className="font-medium">Rs. {order?.total}</span> {"("}Cash
+							on Delivery{")"} will be on its way shortly. We'll get in touch
+							with you via your <span className="font-medium">email</span>{" "}
+							and/or <span className="font-medium">phone number</span>.
+						</p>
+						<p className="font-light">
+							Order ID <span className="font-medium">#{order?.id}</span>
+						</p>
+					</div>
+					<div className="flex flex-row gap-2">
+						<Link
+							href="/orders"
+							className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
+						>
+							My Orders
+						</Link>
+						<Link
+							href="/products"
+							className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
+						>
+							Shop More
+						</Link>
+					</div>
+				</div>
 			) : (
 				<>
 					<div className="flex flex-col gap-8 w-2/5 h-min rounded-xl border border-gray-200 shadow-lg bg-white">
 						<h1 className="rounded-t-xl w-full text-white text-center text-3xl font-medium bg-neutral-800 py-4">
 							Shipping
 						</h1>
-						<div className="flex flex-col gap-4 px-8 pb-8">
+						<form
+							id="shippingDetailsForm"
+							className="flex flex-col gap-4 px-8 pb-8"
+							onSubmit={handleCompleteOrder}
+						>
 							<div className="flex flex-row items-center">
 								<label className="w-44 whitespace-nowrap" htmlFor="firstName">
 									First Name<span className="text-primaryColor">*</span>
@@ -99,6 +215,7 @@ export default function CheckoutDetails() {
 									placeholder="First Name"
 									type="text"
 									required
+									ref={firstNameRef}
 								/>
 							</div>
 							<div className="flex flex-row items-center">
@@ -111,6 +228,7 @@ export default function CheckoutDetails() {
 									placeholder="Last Name"
 									type="text"
 									required
+									ref={lastNameRef}
 								/>
 							</div>
 							<div className="flex flex-row items-center">
@@ -136,6 +254,7 @@ export default function CheckoutDetails() {
 									type="text"
 									maxLength={5}
 									required
+									ref={postalCodeRef}
 								/>
 							</div>
 							<div className="flex flex-row items-center">
@@ -151,6 +270,7 @@ export default function CheckoutDetails() {
 									placeholder="Your Address"
 									type="text"
 									required
+									ref={addressLine1Ref}
 								/>
 							</div>
 							<div className="flex flex-row items-center">
@@ -165,7 +285,7 @@ export default function CheckoutDetails() {
 									name="addressLine2"
 									placeholder="Optional Address Details"
 									type="text"
-									required
+									ref={addressLine2Ref}
 								/>
 							</div>
 							<div className="flex flex-row items-center">
@@ -176,11 +296,12 @@ export default function CheckoutDetails() {
 									<select
 										className="w-full px-4 py-2 rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
 										name="country"
-										defaultValue="pakistan"
+										defaultValue="PK"
 										disabled
 										required
+										ref={countryRef}
 									>
-										<option value="pakistan">Pakistan</option>
+										<option value="PK">Pakistan</option>
 									</select>
 								</div>
 							</div>
@@ -193,22 +314,38 @@ export default function CheckoutDetails() {
 								</label>
 								<PhoneInput
 									country={"pk"}
-									value={phoneNumber}
-									onChange={(number) => setPhoneNumber(number)}
+									onChange={(value, country: CountryData) => {
+										if (isPhoneValid(value, country)) {
+											setPhoneValid(true);
+										} else {
+											setPhoneValid(false);
+										}
+										setPhoneNumber(value);
+									}}
+									isValid={phoneValid}
 									inputStyle={{
 										width: "100%",
 										color: "#374151",
-										backgroundColor: "#FFFFFF",
-										border: "1px solid #E2E8F0",
 										borderRadius: "0.375rem",
 										outline: "none",
 										fontSize: "1rem",
 										lineHeight: "1.5rem",
 										fontWeight: 400,
+										...(phoneValid
+											? { border: "1px solid #E2E8F0" }
+											: { border: "1px solid #BD2828" }),
+									}}
+									buttonStyle={{
+										...(phoneValid
+											? { border: "1px solid #E2E8F0" }
+											: { border: "1px solid #BD2828" }),
+									}}
+									dropdownStyle={{
+										maxHeight: "10rem",
 									}}
 								/>
 							</div>
-						</div>
+						</form>
 					</div>
 					<div className="flex flex-col gap-8 w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
 						<h1 className="rounded-t-xl w-full text-center text-3xl font-medium py-4">
@@ -262,10 +399,8 @@ export default function CheckoutDetails() {
 								</p>
 							</div>
 							<button
-								onClick={() => {
-									router.push("/checkout");
-									toggleCartOpen(false);
-								}}
+								form="shippingDetailsForm"
+								type="submit"
 								className="block py-3 font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-md hover:bg-neutral-700"
 							>
 								Complete Order
