@@ -106,7 +106,7 @@ export default function CheckoutDetails() {
 		try {
 			const { ok, result, error } = await completeOrder(cart, {
 				firstName: firstNameRef.current.value,
-				lastName: firstNameRef.current.value,
+				lastName: lastNameRef.current.value,
 				phoneNumber: phoneNumber,
 				addressLine1: addressLine1Ref.current.value,
 				addressLine2: addressLine2Ref.current.value,
