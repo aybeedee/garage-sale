@@ -16,6 +16,9 @@ export default function CategoryPage({
 	params: { category: string };
 	searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+	/*
+	 * Update: see query in /orders page for inspiration
+	 */
 	// Tables<"product">[] isn't actually the accurate type for this i guess since the query for it joins, filters etc
 	// but no real way to set the type beforehand as the query type can only be determined just before firing the request
 	// ^see https://supabase.com/docs/reference/javascript/typescript-support#response-types-for-complex-queries
@@ -50,7 +53,7 @@ export default function CategoryPage({
 	const fetchProducts = async () => {
 		const query = supabase
 			.from("product")
-			.select(`*, category!inner( id, name, path )`)
+			.select("*, category!inner( id, name, path )")
 			.eq("is_released", true)
 			.eq("category.path", params.category);
 		// sorting

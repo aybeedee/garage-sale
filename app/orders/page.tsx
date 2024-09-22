@@ -1,28 +1,68 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import OrderCard from "@/components/OrderCard";
+import { PopulatedOrder } from "@/utils/app.types";
 
 export default async function Orders() {
-	const cookieStore = cookies();
-	const supabase = createClient(cookieStore);
+	let orders: PopulatedOrder[] | null = null;
+	let error: any = null;
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+	try {
+		const cookieStore = cookies();
+		const supabase = createClient(cookieStore);
 
-	if (!user) {
-		return redirect("/login");
+		const {
+			data: { user },
+			error: authError,
+		} = await supabase.auth.getUser();
+		if (authError || !user) {
+			return redirect("/login");
+		}
+
+		// alias:join_table
+		// nested join by wrapping lower level join with the higher one
+		const { data, error: ordersError } = await supabase
+			.from("order")
+			.select(
+				"*, order_items:order_item!inner(*, product_details:product!inner(*))"
+			)
+			.eq("user_id", user.id);
+		if (ordersError) {
+			throw ordersError;
+		}
+		orders = data;
+	} catch (catchError) {
+		error = catchError;
 	}
 
 	return (
-		<div className="px-5 py-12 sm:px-0 sm:py-28 w-full flex flex-col items-center gap-2 justify-center bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-			<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">
-				ORDERS
-			</h1>
-			<p className="text-lg">
-				This webpage is currently under construction. Thank you for your
-				patience!
-			</p>
-		</div>
+		<>
+			{error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						Oops
+					</h1>
+					<p className="text-lg text-center">
+						An unexpected error occured :/ Try reloading the page.
+					</p>
+				</div>
+			) : orders?.length ? (
+				<div className="flex flex-col justify-center items-center w-full gap-4">
+					{orders.map((order) => (
+						<OrderCard key={order.id} order={order} />
+					))}
+				</div>
+			) : (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						No Orders Found
+					</h1>
+					<p className="text-lg text-center">
+						Seems like you haven't placed any orders yet.
+					</p>
+				</div>
+			)}
+		</>
 	);
 }
