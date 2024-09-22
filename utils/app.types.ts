@@ -50,13 +50,13 @@ export type CartItem = {
 export type Cart = { [productId: string]: CartItem };
 
 export type ShippingDetails = {
-	first_name: string;
-	last_name: string;
-	phone_number: string;
-	address_line_1: string;
-	address_line_2: string;
+	firstName: string;
+	lastName: string;
+	phoneNumber: string;
+	addressLine1: string;
+	addressLine2: string;
 	country: string;
-	postal_code: string;
+	postalCode: string;
 };
 
 export interface ServerActionResponse<T> {

@@ -32,13 +32,13 @@ export default async function completeOrder(
 			error: authError,
 		} = await supabase.auth.updateUser({
 			data: {
-				first_name: shippingDetails.first_name,
-				last_name: shippingDetails.last_name,
-				phone_number: shippingDetails.phone_number,
-				address_line_1: shippingDetails.address_line_1,
-				address_line_2: shippingDetails.address_line_2 ?? null,
+				first_name: shippingDetails.firstName,
+				last_name: shippingDetails.lastName,
+				phone_number: shippingDetails.phoneNumber,
+				address_line_1: shippingDetails.addressLine1,
+				address_line_2: shippingDetails.addressLine2 ?? null,
 				country: shippingDetails.country,
-				postal_code: shippingDetails.postal_code,
+				postal_code: shippingDetails.postalCode,
 			},
 		});
 
@@ -111,13 +111,13 @@ export default async function completeOrder(
 							sum + product.price * cart[product.id].purchaseQuantity,
 						0
 					) + deliveryCharges,
-				first_name: shippingDetails.first_name,
-				last_name: shippingDetails.last_name,
-				phone_number: shippingDetails.phone_number,
-				address_line_1: shippingDetails.address_line_1,
-				address_line_2: shippingDetails.address_line_2 ?? null,
+				first_name: shippingDetails.firstName,
+				last_name: shippingDetails.lastName,
+				phone_number: shippingDetails.phoneNumber,
+				address_line_1: shippingDetails.addressLine1,
+				address_line_2: shippingDetails.addressLine2 ?? null,
 				country: shippingDetails.country,
-				postal_code: shippingDetails.postal_code,
+				postal_code: shippingDetails.postalCode,
 			})
 			.select();
 
