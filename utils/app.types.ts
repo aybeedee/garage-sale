@@ -1,3 +1,5 @@
+import { Tables } from "./database.types";
+
 export type Category = {
 	name: string;
 	path: string;
@@ -57,6 +59,12 @@ export type ShippingDetails = {
 	addressLine2: string;
 	country: string;
 	postalCode: string;
+};
+
+export type PopulatedOrder = Tables<"order"> & {
+	order_items: (Tables<"order_item"> & {
+		product_details: Tables<"product">;
+	})[];
 };
 
 export interface ServerActionResponse<T> {
