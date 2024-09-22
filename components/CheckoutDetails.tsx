@@ -96,7 +96,7 @@ export default function CheckoutDetails() {
 			!lastNameRef.current?.value ||
 			!postalCodeRef.current?.value ||
 			!addressLine1Ref.current?.value ||
-			!addressLine2Ref.current?.value ||
+			!addressLine2Ref.current ||
 			!countryRef.current?.value
 		) {
 			return;
