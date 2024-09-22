@@ -12,6 +12,7 @@
 		"@supabase/supabase-js": "latest",
 		"autoprefixer": "10.4.15",
 		"geist": "^1.0.0",
+		"libphonenumber-js": "^1.11.8",
 		"next": "^14.2.12",
 		"postcss": "^8.4.47",
 		"react": "18.2.0",
