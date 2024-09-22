@@ -149,7 +149,7 @@ export default function CheckoutDetails() {
 	}, []);
 
 	return (
-		<div className="flex flex-row justify-center w-full gap-10">
+		<div className="flex flex-col md:flex-row justify-center items-center md:items-start w-full gap-4 lg:gap-10">
 			{isLoading ? (
 				<div className="flex flex-row w-full h-[50vh] items-center justify-center">
 					<Loader size={75} />
@@ -196,13 +196,13 @@ export default function CheckoutDetails() {
 				</div>
 			) : (
 				<>
-					<div className="flex flex-col gap-8 w-2/5 h-min rounded-xl border border-gray-200 shadow-lg bg-white">
-						<h1 className="rounded-t-xl w-full text-white text-center text-3xl font-medium bg-neutral-800 py-4">
+					<div className="flex flex-col gap-8 w-full sm:w-4/5 md:w-1/2 xl:w-2/5 h-min rounded-xl border border-gray-200 shadow-lg bg-white">
+						<h1 className="rounded-t-xl w-full text-white text-center text-2xl lg:text-3xl font-medium bg-neutral-800 py-4">
 							Shipping
 						</h1>
 						<form
 							id="shippingDetailsForm"
-							className="flex flex-col gap-4 px-8 pb-8"
+							className="flex flex-col gap-4 px-4 lg:px-8 pb-8"
 							onSubmit={handleCompleteOrder}
 						>
 							<div className="flex flex-row items-center">
@@ -210,7 +210,7 @@ export default function CheckoutDetails() {
 									First Name<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
 									name="firstName"
 									placeholder="First Name"
 									type="text"
@@ -223,7 +223,7 @@ export default function CheckoutDetails() {
 									Last Name<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
 									name="lastName"
 									placeholder="Last Name"
 									type="text"
@@ -236,7 +236,7 @@ export default function CheckoutDetails() {
 									Email<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
 									name="email"
 									placeholder="you@example.com"
 									type="email"
@@ -250,7 +250,7 @@ export default function CheckoutDetails() {
 									Postal Code<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
 									name="postalCode"
 									placeholder="44000"
 									type="text"
@@ -267,7 +267,7 @@ export default function CheckoutDetails() {
 									Address Line 1<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
 									name="addressLine1"
 									placeholder="Your Address"
 									type="text"
@@ -283,7 +283,7 @@ export default function CheckoutDetails() {
 									Address Line 2
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-sm lg:text-base text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
 									name="addressLine2"
 									placeholder="Optional Address Details"
 									type="text"
@@ -296,7 +296,7 @@ export default function CheckoutDetails() {
 								</label>
 								<div className="w-full text-gray-700 bg-white border rounded-md border-gray-200">
 									<select
-										className="w-full px-4 py-2 rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
+										className="w-full px-4 py-2 text-sm lg:text-base rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
 										name="country"
 										defaultValue="PK"
 										disabled
@@ -349,12 +349,12 @@ export default function CheckoutDetails() {
 							</div>
 						</form>
 					</div>
-					<div className="flex flex-col gap-8 w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
-						<h1 className="rounded-t-xl w-full text-center text-3xl font-medium py-4">
+					<div className="flex flex-col gap-8 w-full sm:w-4/5 md:w-1/2 xl:w-2/5 rounded-xl border border-gray-200 shadow-lg bg-white">
+						<h1 className="rounded-t-xl w-full text-center text-2xl lg:text-3xl font-medium py-4">
 							Summary
 						</h1>
-						<div className="flex flex-col justify-between h-full pb-8 px-8 gap-4">
-							<div className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto px-10">
+						<div className="flex flex-col justify-between h-full pb-8 px-4 lg:px-8 gap-8">
+							<div className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto px-2">
 								{Object.entries(cart).map(([productId, cartItem]) => (
 									<CheckoutItemCard cartItem={cartItem} key={productId} />
 								))}
@@ -384,7 +384,7 @@ export default function CheckoutDetails() {
 									</label>
 									<div className="w-full text-gray-700 bg-white border rounded-md border-gray-200">
 										<select
-											className="w-full px-4 py-2 rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
+											className="w-full px-4 py-2 text-sm lg:text-base rounded-md border-transparent border-r-8 cursor-not-allowed focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 disabled:bg-gray-200"
 											name="paymentMethod"
 											defaultValue="cashOnDelivery"
 											disabled
@@ -394,7 +394,7 @@ export default function CheckoutDetails() {
 										</select>
 									</div>
 								</div>
-								<p>
+								<p className="text-sm lg:text-base">
 									Note: We ensure swift processing and dispatch within{" "}
 									<strong>1-2 business days</strong> reaching you within{" "}
 									<strong>5-7 days</strong>.
