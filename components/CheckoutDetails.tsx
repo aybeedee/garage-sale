@@ -236,11 +236,13 @@ export default function CheckoutDetails() {
 									Email<span className="text-primaryColor">*</span>
 								</label>
 								<input
-									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10"
+									className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md border-gray-200 focus:border-primaryColor focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primaryColor/10 cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
 									name="email"
 									placeholder="you@example.com"
 									type="email"
 									required
+									value={user?.email}
+									disabled
 								/>
 							</div>
 							<div className="flex flex-row items-center">
