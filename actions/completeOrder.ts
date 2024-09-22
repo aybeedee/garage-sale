@@ -92,13 +92,6 @@ export default async function completeOrder(
 			}
 		});
 
-		{
-			Object.values(cart).reduce(
-				(sum, product) => sum + product.price * product.purchaseQuantity,
-				0
-			) + deliveryCharges;
-		}
-
 		// creating order record
 		const { data: orderData, error: orderError } = await supabase
 			.from("order")
@@ -154,19 +147,22 @@ export default async function completeOrder(
 			};
 		}
 
+		/*
+		 * Update: removing this functionality from here, regular users should not be allowed to invoke this functionality regardless of from where - will take this to admin side with order approval-like mechanism
+		 */
 		// updating product stock quantities
 		// TODO: not checking for errors here since will be pointless if we don't actually implement the transactional logic all the way; so leaving for now until this scales further and the whole thing gets turned into a transaction function rpc call anyway
-		await Promise.all(
-			productsData.map(async (product) => {
-				await supabase
-					.from("product")
-					.update({
-						stock_quantity:
-							product.stock_quantity - cart[product.id].purchaseQuantity,
-					})
-					.eq("id", product.id);
-			})
-		);
+		// await Promise.all(
+		// 	productsData.map(async (product) => {
+		// 		await supabase
+		// 			.from("product")
+		// 			.update({
+		// 				stock_quantity:
+		// 					product.stock_quantity - cart[product.id].purchaseQuantity,
+		// 			})
+		// 			.eq("id", product.id);
+		// 	})
+		// );
 
 		return {
 			ok: true,
