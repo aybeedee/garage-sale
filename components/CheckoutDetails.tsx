@@ -164,11 +164,11 @@ export default function CheckoutDetails() {
 					</p>
 				</div>
 			) : isOrderComplete ? (
-				<div className="flex flex-col items-center justify-center w-1/3 pt-3 pb-7 rounded-xl border border-gray-200 shadow-lg bg-white">
+				<div className="flex flex-col items-center justify-center w-full md:w-3/5 lg:w-1/2 xl:w-2/5 pt-4 pb-10 rounded-xl border border-gray-200 shadow-lg bg-white">
 					<TickIcon />
 					<div className="flex flex-col items-center justify-center gap-4 mb-6">
-						<h1 className="text-3xl font-bold">Order Completed</h1>
-						<p className="px-10 text-sm font-light text-center">
+						<h1 className="text-2xl sm:text-3xl font-bold">Order Completed</h1>
+						<p className="text-sm sm:text-base px-8 lg:px-10 font-light text-center">
 							Your order totalling{" "}
 							<span className="font-medium">Rs. {order?.total}</span> {"("}Cash
 							on Delivery{")"} will be on its way shortly. We'll get in touch
@@ -176,19 +176,19 @@ export default function CheckoutDetails() {
 							and/or <span className="font-medium">phone number</span>.
 						</p>
 						<p className="font-light">
-							Order ID <span className="font-medium">#{order?.id}</span>
+							Order ID: <span className="font-medium">{order?.id}</span>
 						</p>
 					</div>
 					<div className="flex flex-row gap-2">
 						<Link
 							href="/orders"
-							className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
+							className="block px-8 sm:px-10 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
 						>
 							My Orders
 						</Link>
 						<Link
 							href="/products"
-							className="block px-6 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
+							className="block px-8 sm:px-10 py-2.5 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-neutral-800 rounded-lg focus:outline-none hover:bg-neutral-700 focus:ring focus:ring-neutral-300 focus:ring-opacity-80 md:w-auto"
 						>
 							Shop More
 						</Link>
