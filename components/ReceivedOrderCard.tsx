@@ -14,7 +14,8 @@ export default function ReceivedOrderCard({
 			<div className="flex flex-col sm:flex-row justify-between items-center text-start w-full">
 				<div className="flex flex-col w-full whitespace-nowrap">
 					<p className="font-medium">
-						Order ID: <span className="font-light">{order.id}</span>
+						Order ID:{" "}
+						<span className="font-light text-sm sm:text-base">{order.id}</span>
 					</p>
 					<p className="font-medium">
 						Name:{" "}
@@ -39,6 +40,24 @@ export default function ReceivedOrderCard({
 						<span className="font-light">{order.item_count}</span>
 					</p>
 				</div>
+			</div>
+			<div className="flex flex-row w-full justify-end">
+				{order.status === "PENDING" ? (
+					<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+						Confirm Order
+					</button>
+				) : order.status === "PROCESSING" ? (
+					<div className="flex flex-row gap-4 w-full justify-end">
+						<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+							Mark as Shipped
+						</button>
+						<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+							Mark as Delivered
+						</button>
+					</div>
+				) : (
+					<></>
+				)}
 			</div>
 			<div className="border-t border-neutral-400">
 				<h2>

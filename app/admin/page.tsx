@@ -47,8 +47,11 @@ export default function Admin() {
 			)
 			.order("created_at", { ascending: false });
 
-		if (filter === "PENDING" || filter === "PROCESSING") {
+		if (filter === "PENDING") {
 			query.eq("status", filter);
+		} else if (filter === "PROCESSING") {
+			// warra syntax, surely there's a better way to do this?
+			query.or("status.eq.PROCESSING,status.eq.SHIPPED");
 		}
 
 		const { data, error } = await query;
