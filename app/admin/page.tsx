@@ -60,7 +60,6 @@ export default function Admin() {
 			return;
 		}
 		setOrders(data);
-		console.log(data);
 	};
 
 	const getData = async () => {
