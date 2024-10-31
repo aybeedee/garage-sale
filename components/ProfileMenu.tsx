@@ -4,15 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { ProfileMenuOption } from "@/utils/app.types";
 import { profileMenuList } from "@/utils/constants";
 import ProfileIcon from "./ProfileIcon";
+import { Tables } from "@/utils/database.types";
 
 export default function ProfileMenu({
-	email,
+	user,
 	signOut,
 }: {
-	email: string | undefined;
+	user: Tables<"user">;
 	signOut: () => Promise<never>;
 }) {
 	const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false);
+	const [menuList, setMenuList] =
+		useState<ProfileMenuOption[]>(profileMenuList);
 	const profileMenuRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -24,6 +27,16 @@ export default function ProfileMenu({
 				setOpenProfileMenu(false);
 			}
 		};
+
+		// TODO: this seems like an iffy way to handle this tbh; even though shouldn't matter much if checking admin access on /admin mount anyway
+		if (!user.is_admin) {
+			setMenuList((prevMenuList) =>
+				prevMenuList.filter(
+					(profileMenuOption: ProfileMenuOption) =>
+						profileMenuOption.path !== "admin"
+				)
+			);
+		}
 
 		window.addEventListener("click", handleClickOutside);
 		return () => window.removeEventListener("click", handleClickOutside);
@@ -45,9 +58,9 @@ export default function ProfileMenu({
 				<div className="absolute z-10 bg-white divide-y divide-gray-700 rounded-lg shadow-black/25 shadow-lg w-max right-0 text-center animate-out">
 					<ul className="px-2 text-sm text-gray-700">
 						<li className="text-xs opacity-75 block py-2 border-b border-gray-300">
-							{email ? email : ""}
+							{user.email}
 						</li>
-						{profileMenuList.map(
+						{menuList.map(
 							(profileMenuOption: ProfileMenuOption, index: number) => (
 								<li key={index}>
 									<a

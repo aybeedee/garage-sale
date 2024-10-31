@@ -62,15 +62,18 @@ export type ShippingDetails = {
 };
 
 export type PopulatedOrder = Tables<"order"> & {
-	order_items: (Tables<"order_item"> & {
-		product_details: Tables<"product">;
-	})[];
+	order_items: PoplatedOrderItem[];
 };
 
-export interface ServerActionResponse<T> {
+export type PoplatedOrderItem = Tables<"order_item"> & {
+	product_details: Tables<"product">;
+};
+
+export interface ServerActionResponse<T = null> {
 	ok: boolean;
 	result: T | null;
 	error: {
+		// TODO: there should be an enum for this type
 		type: "DATABASE_ERROR" | "SERVER_ERROR" | "CLIENT_ERROR";
 		response: any;
 	} | null;
