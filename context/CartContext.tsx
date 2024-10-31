@@ -32,6 +32,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const updateCart = (
 		productId: string,
+		// TODO: there should be an enum for this type
 		action: "increment" | "decrement" | "remove"
 	) => {
 		switch (action) {

@@ -71,6 +71,7 @@ export interface ServerActionResponse<T> {
 	ok: boolean;
 	result: T | null;
 	error: {
+		// TODO: there should be an enum for this type
 		type: "DATABASE_ERROR" | "SERVER_ERROR" | "CLIENT_ERROR";
 		response: any;
 	} | null;
