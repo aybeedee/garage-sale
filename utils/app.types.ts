@@ -69,7 +69,7 @@ export type PoplatedOrderItem = Tables<"order_item"> & {
 	product_details: Tables<"product">;
 };
 
-export interface ServerActionResponse<T> {
+export interface ServerActionResponse<T = null> {
 	ok: boolean;
 	result: T | null;
 	error: {
