@@ -1,6 +1,11 @@
+"use client";
+
 import { PopulatedOrder } from "@/utils/app.types";
 import OrderItem from "./OrderItem";
 import { useState } from "react";
+import updateOrderStatus from "@/actions/updateOrderStatus";
+import { Database } from "@/utils/database.types";
+import { useRouter } from "next/navigation";
 
 export default function ReceivedOrderCard({
 	order,
@@ -8,6 +13,35 @@ export default function ReceivedOrderCard({
 	order: PopulatedOrder;
 }) {
 	const [showDetails, setShowDetails] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [error, setError] = useState<any>(null);
+
+	const router = useRouter();
+
+	const handleUpdateOrder = async (
+		status: Database["public"]["Enums"]["order_status"]
+	) => {
+		setIsLoading(true);
+		try {
+			const { ok, result, error } = await updateOrderStatus(
+				status,
+				order.id,
+				order.order_items
+			);
+			if (!ok) {
+				throw new Error(error!.response);
+			}
+
+			if (result) {
+				// TODO: terrible
+				router.refresh();
+			}
+		} catch (error) {
+			setError(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	return (
 		<div className="flex flex-col w-full lg:w-9/12 p-6 gap-4 rounded-xl border border-gray-200 shadow-lg bg-white">
@@ -43,20 +77,36 @@ export default function ReceivedOrderCard({
 			</div>
 			<div className="flex flex-row w-full justify-end">
 				{order.status === "PENDING" ? (
-					<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+					<button
+						onClick={() => handleUpdateOrder("PROCESSING")}
+						className={`${isLoading && "disabled"} w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80`}
+					>
 						Confirm Order
 					</button>
 				) : order.status === "PROCESSING" ? (
 					<div className="flex flex-row gap-4 w-full justify-end">
-						<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+						<button
+							onClick={() => handleUpdateOrder("SHIPPED")}
+							className={`${isLoading && "disabled"} w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80`}
+						>
 							Mark as Shipped
 						</button>
-						<button className="w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80">
+						<button
+							onClick={() => handleUpdateOrder("DELIVERED")}
+							className={`${isLoading && "disabled"} w-full sm:w-min whitespace-nowrap px-6 py-2.5 text-sm font-medium text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-80`}
+						>
 							Mark as Delivered
 						</button>
 					</div>
 				) : (
 					<></>
+				)}
+			</div>
+			<div className="w-full">
+				{error && (
+					<p className="text-red-500 text-center">
+						An unexpected error occured. Reload the page or try again.
+					</p>
 				)}
 			</div>
 			<div className="border-t border-neutral-400">
