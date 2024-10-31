@@ -41,6 +41,10 @@ export const sortingList: SortType[] = [
 
 export const profileMenuList: ProfileMenuOption[] = [
 	{
+		name: "Admin Portal",
+		path: "admin",
+	},
+	{
 		name: "My Orders",
 		path: "orders",
 	},
