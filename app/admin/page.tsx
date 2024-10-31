@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
-import { Tables } from "@/utils/database.types";
 import { PopulatedOrder } from "@/utils/app.types";
+import ReceivedOrderCard from "@/components/ReceivedOrderCard";
+import Loader from "@/components/Loader";
 
 export default function Admin() {
 	// TODO: there should be an enum for this type
@@ -12,6 +13,7 @@ export default function Admin() {
 	const [orders, setOrders] = useState<PopulatedOrder[] | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<any>(null);
+	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
 
 	const router = useRouter();
 	const supabase = createClient();
@@ -42,7 +44,8 @@ export default function Admin() {
 			.from("order")
 			.select(
 				"*, order_items:order_item!inner(*, product_details:product!inner(*))"
-			);
+			)
+			.order("created_at", { ascending: false });
 
 		if (filter === "PENDING" || filter === "PROCESSING") {
 			query.eq("status", filter);
@@ -59,8 +62,10 @@ export default function Admin() {
 
 	const getData = async () => {
 		try {
-			// not firing these requests together since want to redirect away before fetchOrders if user not fetched/is not admin
-			await validateAdmin();
+			if (isFirstRender) {
+				await validateAdmin();
+				setIsFirstRender(false);
+			}
 			await fetchOrders();
 		} catch (error) {
 			setError(error);
@@ -71,17 +76,63 @@ export default function Admin() {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [filter]);
 
 	return (
-		<div className="px-5 py-12 sm:px-0 sm:py-28 w-full flex flex-col items-center gap-2 justify-center bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur">
-			<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize">
-				ADMIN PORTAL
-			</h1>
-			<p className="text-lg">
-				This webpage is currently under construction. Thank you for your
-				patience!
-			</p>
-		</div>
+		<>
+			{isLoading ? (
+				<div className="flex flex-row w-full h-[50vh] items-center justify-center">
+					<Loader size={75} />
+				</div>
+			) : error !== null ? (
+				<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+					<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+						Oops
+					</h1>
+					<p className="text-lg text-center">
+						An unexpected error occured :/ Try reloading the page.
+					</p>
+				</div>
+			) : (
+				<div className="flex flex-col w-full gap-4">
+					<div className="flex flex-row justify-center gap-2">
+						{
+							// TODO: terrible
+							["ALL", "PENDING", "PROCESSING"].map((status, index) => (
+								<button
+									key={index}
+									className={`px-5 py-2 font-medium text-center border border-neutral-800 rounded-md transition-colors duration-300 transform ${status === filter ? "text-white bg-neutral-800" : "bg-white hover:bg-neutral-100"}`}
+									onClick={() => {
+										if (status !== filter) {
+											// TODO: ...
+											setFilter(status as "ALL" | "PENDING" | "PROCESSING");
+										}
+									}}
+								>
+									{status}
+								</button>
+							))
+						}
+					</div>
+					{orders?.length ? (
+						<div className="flex flex-col justify-center items-center w-full gap-4">
+							{orders.map((order) => (
+								<ReceivedOrderCard key={order.id} order={order} />
+							))}
+						</div>
+					) : (
+						<div className="flex flex-col justify-center items-center gap-2 px-6 h-[50vh]">
+							<h1 className="mt-4 text-2xl font-semibold text-gray-700 capitalize text-center">
+								No Received Orders Found
+							</h1>
+							<p className="text-lg text-center">
+								Seems like there aren't any received orders to show. Try
+								changing the filter maybe?
+							</p>
+						</div>
+					)}
+				</div>
+			)}
+		</>
 	);
 }
