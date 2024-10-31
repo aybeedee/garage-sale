@@ -26,8 +26,6 @@ export default async function Profile() {
 		}
 	}
 
-	console.log(user);
-
 	const signOut = async () => {
 		"use server";
 

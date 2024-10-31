@@ -1,5 +1,5 @@
 import { PopulatedOrder } from "@/utils/app.types";
-import OrderItemCard from "./OrderItemCard";
+import OrderItem from "./OrderItem";
 
 export default function OrderCard({ order }: { order: PopulatedOrder }) {
 	return (
