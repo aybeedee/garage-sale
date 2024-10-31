@@ -62,9 +62,11 @@ export type ShippingDetails = {
 };
 
 export type PopulatedOrder = Tables<"order"> & {
-	order_items: (Tables<"order_item"> & {
-		product_details: Tables<"product">;
-	})[];
+	order_items: PoplatedOrderItem[];
+};
+
+export type PoplatedOrderItem = Tables<"order_item"> & {
+	product_details: Tables<"product">;
 };
 
 export interface ServerActionResponse<T> {
